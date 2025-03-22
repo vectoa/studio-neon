@@ -4,7 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
-
+/build
 # testing
 /coverage
 
@@ -27,3 +27,4 @@ yarn-error.log*
 node_modules/
 build/
 .DS_Store
+build/
