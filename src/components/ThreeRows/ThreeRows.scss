@@ -1,0 +1,110 @@
+@import '../../scss/_variables';
+
+.three-rows {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 3rem 2rem;
+  background-color: #000;
+  font-family: 'Mali', sans-serif;
+
+  .neon-card {
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    flex: 1;
+
+    h3 {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    p {
+      color: #ccc;
+      font-size: 1rem;
+    }
+
+    &:hover {
+      transform: translateY(-8px);
+    }
+  }
+
+  .neon-gold {
+    box-shadow:
+      0 0 5px #ffd700,
+      0 0 15px #ffd700,
+      0 0 25px #ffc400,
+      inset 0 0 5px #ffd700;
+  
+    &:hover {
+      box-shadow:
+        0 0 8px #ffd700,
+        0 0 20px #ff9900,
+        0 0 25px #ff9900;
+    }
+  
+    h3 {
+      text-shadow: 0 0 8px #ffd700;
+    }
+  }
+
+  .neon-pink {
+    box-shadow:
+      0 0 5px #ff1493,
+      0 0 15px #ff1493,
+      0 0 25px #ff007f,
+      inset 0 0 5px #ff1493;
+  
+    &:hover {
+      box-shadow:
+        0 0 8px #ff1493,
+        0 0 20px #ff007f;
+    }
+  
+    h3 {
+      text-shadow: 0 0 8px #ff1493;
+    }
+  }
+
+  .neon-purple {
+    box-shadow:
+      0 0 5px #b300ff,
+      0 0 15px #b300ff,
+      0 0 20px #b300ff;
+
+    &:hover {
+      box-shadow:
+        0 0 8px #b300ff,
+        0 0 20px #b300ff;
+    }
+
+    h3 {
+      text-shadow: 0 0 8px #b300ff;
+    }
+  }
+}
+
+// Responsive (Optimisation pour téléphone)
+@media (max-width: 768px) {
+  .three-rows {
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    gap: 1rem;
+
+    .neon-card {
+      width: 100%;
+      padding: 15px;
+
+      h3 {
+        font-size: 1.3rem;
+      }
+
+      p {
+        font-size: 0.95rem;
+      }
+    }
+  }
+}

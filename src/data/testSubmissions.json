@@ -1,0 +1,14 @@
+
+
+[
+    {
+      "firstName": "Alice",
+      "name": "Dupont",
+      "email": "alice@example.com",
+      "phone": "+33 612345678",
+      "idea": "Idée de projet pour améliorer l'UX du site.",
+      "file": "logo1.png"
+    }
+
+]
+  

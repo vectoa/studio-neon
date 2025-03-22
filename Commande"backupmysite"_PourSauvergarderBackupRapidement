@@ -1,0 +1,31 @@
+**SIMPLE**
+il suffit de taper simplement :
+"backupmysite"
+pour lancer le script de backup, quel que soit le dossier où tu te trouves.
+
+
+
+//////////////////////////////////
+**COMPREHENSION**
+
+**Instructions pour exécuter le backup depuis n’importe quel répertoire :**
+
+1. **Rendre le script exécutable :**  
+   Assure-toi que le script de backup est exécutable avec la commande suivante :  
+   ```bash
+   chmod +x /home/ubuntu/backup_du_site/backup_site.sh
+   ```
+
+2. **Créer un lien symbolique global :**  
+   Pour pouvoir lancer le script en tapant une seule commande (par exemple, `backupmysite`) depuis n’importe quel dossier, crée un lien symbolique dans `/usr/local/bin` (qui est dans le PATH) avec la commande :  
+   ```bash
+   sudo ln -sf /home/ubuntu/backup_du_site/backup_site.sh /usr/local/bin/backupmysite
+   ```
+   Cette commande crée (ou met à jour) le lien nommé `backupmysite` qui pointe vers ton script de backup.
+
+3. **Lancer le script :**  
+   Maintenant, il suffit de taper simplement :
+   ```bash
+   backupmysite
+   ```
+   pour lancer le script de backup, quel que soit le dossier où tu te trouves.

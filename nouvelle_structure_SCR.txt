@@ -1,0 +1,119 @@
+/home/ubuntu/site1/src
+├── App.jsx
+├── AuthContext.js
+├── ProtectedRoute.jsx
+├── components
+│   ├── BannerHero
+│   │   ├── BannerHero.jsx
+│   │   ├── BannerHero.scss
+│   │   └── index.jsx
+│   ├── Carousel
+│   │   ├── Carousel.jsx
+│   │   ├── Carousel.scss
+│   │   └── index.jsx
+│   ├── CarteComponent
+│   │   ├── CartPageComponent.jsx
+│   │   ├── _cart.scss
+│   │   └── index.jsx
+│   ├── Collapsible
+│   │   ├── CollapsibleRow.jsx
+│   │   ├── CollapsibleRows.jsx
+│   │   ├── _collapsible.scss
+│   │   └── index.jsx
+│   ├── ContactIdeaComponent
+│   │   ├── ContactIdeaComponent.jsx
+│   │   ├── Idea.scss
+│   │   └── index.jsx
+│   ├── CustomizeNeonComponent
+│   │   ├── CustomizeNeonComponent.jsx
+│   │   ├── _customize-neon.scss
+│   │   └── index.jsx
+│   ├── Forms
+│   │   ├── ContactIdeaForm
+│   │   │   ├── ContactIdeaForm.jsx
+│   │   │   ├── _contact.scss
+│   │   │   ├── a
+│   │   │   ├── index.jsx
+│   │   │   └── suppr
+│   │   └── Newsletter
+│   │       ├── Newsletter.jsx
+│   │       ├── _newsletter.scss
+│   │       └── index.jsx
+│   ├── HeaderFooter
+│   │   ├── Footer
+│   │   │   ├── Footer.jsx
+│   │   │   ├── _footer.scss
+│   │   │   └── index.jsx
+│   │   └── Header
+│   │       ├── Header.jsx
+│   │       ├── _header.scss
+│   │       └── index.jsx
+│   ├── ImageWithText
+│   │   ├── ImageWithText.jsx
+│   │   ├── _image-text.scss
+│   │   └── index.jsx
+│   ├── Productpage
+│   │   └── index.jsx
+│   └── ThreeRows
+│       ├── ThreeRows.jsx
+│       ├── ThreeRows.scss
+│       └── index.jsx
+├── data
+│   ├── colors.json
+│   ├── polices.json
+│   ├── pricingRules.json
+│   └── shopProducts.json
+├── index.css
+├── index.jsx
+├── logo.svg
+├── pages
+│   ├── Admin
+│   │   ├── AdminDashboard
+│   │   │   ├── AdminDashboard.jsx
+│   │   │   ├── _admin-dashboard.scss
+│   │   │   └── index.jsx
+│   │   └── AdminLogin
+│   │       ├── AdminLogin.jsx
+│   │       ├── _admin-login.scss
+│   │       └── index.jsx
+│   ├── Cart
+│   │   ├── CartPage.jsx
+│   │   └── index.jsx
+│   ├── Checkout
+│   │   ├── CheckoutPage.jsx
+│   │   ├── _checkout.scss
+│   │   └── index.jsx
+│   ├── ContactIdea
+│   │   ├── ContactIdeaPage.jsx
+│   │   └── index.jsx
+│   ├── Customize
+│   │   ├── CustomizeNeonPage.jsx
+│   │   └── index.jsx
+│   ├── Home
+│   │   ├── HomePage.jsx
+│   │   └── index.jsx
+│   ├── Product
+│   │   ├── ProductPage.jsx
+│   │   ├── ProductPage.scss
+│   │   └── index.Jsx
+│   └── Shop
+│       ├── ShopPage.jsx
+│       ├── ShopPage.scss
+│       └── index.jsx
+├── reportWebVitals.js
+├── scss
+│   ├── App.scss
+│   ├── ShopPage.scss
+│   ├── _admin.scss
+│   ├── _buttons.scss
+│   ├── _product.scss
+│   ├── _variables.scss
+│   ├── main.scss
+│   └── mixins.scss
+├── secret.js
+├── services
+│   ├── dataService.js
+│   └── productService.js
+└── setupTests.js
+
+33 directories, 84 files

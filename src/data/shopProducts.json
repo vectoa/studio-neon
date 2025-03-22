@@ -1,0 +1,140 @@
+[
+  {
+    "id": 1,
+    "name": "Néon Hello",
+    "price": 50,
+    "image": "/images/neonHello.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Néon Open",
+    "price": 60,
+    "image": "/images/neonOpen.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Néon Love",
+    "price": 70,
+    "image": "/images/neonLove.jpg"
+  },
+  {
+    "id": 4,
+    "name": "Néon Dream",
+    "price": 75,
+    "image": "/images/neonDream.jpg"
+  },
+  {
+    "id": 5,
+    "name": "Néon Star",
+    "price": 80,
+    "image": "/images/neonStar.jpg"
+  },
+  {
+    "id": 6,
+    "name": "Néon Shine",
+    "price": 85,
+    "image": "/images/neonShine.jpg"
+  },
+  {
+    "id": 7,
+    "name": "Néon Party",
+    "price": 70,
+    "image": "/images/neonParty.jpg"
+  },
+  {
+    "id": 8,
+    "name": "Néon Bar",
+    "price": 90,
+    "image": "/images/neonBar.jpg"
+  },
+  {
+    "id": 9,
+    "name": "Néon Cheers",
+    "price": 95,
+    "image": "/images/neonCheers.jpg"
+  },
+  {
+    "id": 10,
+    "name": "Néon Moon",
+    "price": 100,
+    "image": "/images/neonMoon.jpg"
+  },
+  {
+    "id": 11,
+    "name": "Néon Star2",
+    "price": 110,
+    "image": "/images/neonStar2.jpg"
+  },
+  {
+    "id": 12,
+    "name": "Néon Chill",
+    "price": 65,
+    "image": "/images/neonChill.jpg"
+  },
+  {
+    "id": 13,
+    "name": "Néon Music",
+    "price": 105,
+    "image": "/images/neonMusic.jpg"
+  },
+  {
+    "id": 14,
+    "name": "Néon Coffee",
+    "price": 60,
+    "image": "/images/neonCoffee.jpg"
+  },
+  {
+    "id": 15,
+    "name": "Néon Cupcake",
+    "price": 70,
+    "image": "/images/neonCupcake.jpg"
+  },
+  {
+    "id": 16,
+    "name": "Néon Flamingo",
+    "price": 95,
+    "image": "/images/neonFlamingo.jpg"
+  },
+  {
+    "id": 17,
+    "name": "Néon Paradise",
+    "price": 120,
+    "image": "/images/neonParadise.jpg"
+  },
+  {
+    "id": 18,
+    "name": "Néon Beach",
+    "price": 110,
+    "image": "/images/neonBeach.jpg"
+  },
+  {
+    "id": 19,
+    "name": "Néon Gamer",
+    "price": 75,
+    "image": "/images/neonGamer.jpg"
+  },
+  {
+    "id": 20,
+    "name": "Néon Wifi",
+    "price": 65,
+    "image": "/images/neonWifi.jpg"
+  },
+  {
+    "id": 21,
+    "name": "Néon Cactus",
+    "price": 80,
+    "image": "/images/neonCactus.jpg"
+  },
+  {
+    "id": 22,
+    "name": "Néon Rose",
+    "price": 85,
+    "image": "/images/neonRose.jpg"
+  },
+  {
+    "id": 23,
+    "name": "Néon Wine",
+    "price": 100,
+    "image": "/images/neonWine.jpg"
+  }
+]

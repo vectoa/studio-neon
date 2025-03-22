@@ -1,0 +1,241 @@
+/* ==========================================================================
+   /home/ubuntu/site1/src/components/Carousel/Carousel.scss
+   --------------------------------------------------------------------------
+   SCSS pour personnaliser le carrousel Swiper et afficher vos produits néon.
+   Les couleurs, ombres et variables Sass sont conservées pour un style cohérent.
+   ========================================================================== */
+
+@import '../../scss/_variables';
+/* 
+      Dans _variables.scss, vous avez :
+      $primary-color: #007bff;
+      $secondary-color: #f8f9fa;
+      $text-color: #333;
+      $background-light: #f8f9fa;
+      $border-radius: 8px;
+      $transition-speed: 0.3s;
+   */
+
+/* --------------------------------------------------------------------------
+      SECTION : Carrousel principal
+      -------------------------------------------------------------------------- */
+.carousel-section {
+  text-align: center;
+  padding: 2rem;
+  background: #000;
+  /* Fond noir inchangé */
+  font-family: 'Mali', sans-serif;
+  color: #fff;
+
+  .carousel-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #fff;
+    /* Conserve le blanc */
+    text-shadow:
+      0 0 8px #7476ff,
+      /* Effet néon violet */
+      0 0 16px #0408fb;
+    /* Effet néon bleu profond */
+  }
+
+  .swiper {
+    width: 100%;
+    padding: 1rem 0;
+  }
+
+  /* Chaque slide du carrousel */
+  .carousel-item {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 1rem;
+    border-radius: $border-radius;
+    box-shadow:
+      0 0 6px #7476ff,
+      0 0 12px #0408fb;
+    transition: transform $transition-speed ease, box-shadow $transition-speed ease;
+
+    img {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 5px;
+      border: 1px solid #7476ff;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      margin: 0.5rem 0;
+      color: #fff;
+      text-shadow: 0 0 8px #7476ff;
+    }
+
+    .price {
+      color: #ffd700;
+      font-weight: bold;
+      font-size: 1.2rem;
+      text-shadow: 0 0 6px #ffd700;
+    }
+
+    .buy-btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 16px;
+      background-color: #7476ff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background $transition-speed, transform $transition-speed;
+      box-shadow:
+        0 0 6px #7476ff,
+        0 0 12px #0408fb;
+
+      &:hover {
+        background: #0408fb;
+        transform: translateY(-3px);
+        box-shadow:
+          0 0 8px #7476ff,
+          0 0 16px #0408fb;
+      }
+    }
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow:
+        0 0 8px #7476ff,
+        0 0 16px #0408fb;
+    }
+  }
+
+  /* ------------------------------------------------------------------------
+        RESPONSIVE : Ajustements pour différentes largeurs d'écran
+        ------------------------------------------------------------------------ */
+  @media (max-width: 1024px) {
+    .swiper {
+      width: 100%;
+    }
+
+    .carousel-item {
+      img {
+        max-height: 150px;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .carousel-title {
+      font-size: 1.8rem;
+    }
+
+    .swiper {
+      width: 100%;
+    }
+
+    .carousel-item {
+      img {
+        max-height: 120px;
+      }
+
+      h3 {
+        font-size: 1rem;
+      }
+
+      .price {
+        font-size: 1rem;
+      }
+
+      .buy-btn {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    .carousel-title {
+      font-size: 1.5rem;
+    }
+
+    .swiper {
+      width: 100%;
+    }
+
+    .carousel-item {
+      img {
+        max-height: 130px;
+      }
+    }
+  }
+}
+
+/* ==========================================================================
+      Personnalisation des flèches de navigation Swiper
+      ========================================================================== */
+
+/* On écrase les variables CSS Swiper pour la taille, etc. */
+:root {
+  --swiper-navigation-size: 60px;
+  /* Taille globale du bouton, plus grande que 44px */
+  --swiper-navigation-top-offset: 50%;
+  --swiper-navigation-sides-offset: 15px;
+  /* Décalage horizontal un peu plus grand */
+  --swiper-navigation-color: #ffffff;
+  /* Couleur de la flèche */
+}
+
+/* Ajuste la taille et le positionnement des boutons de navigation (classes par défaut) */
+.swiper-button-prev,
+.swiper-button-next {
+  width: var(--swiper-navigation-size);
+  height: var(--swiper-navigation-size);
+  top: var(--swiper-navigation-top-offset);
+  margin-top: calc(-1 * (var(--swiper-navigation-size) / 2));
+  left: auto;
+  right: auto;
+  z-index: 10;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Optionnel : fond derrière la flèche
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 50%;
+     */
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Place la flèche de gauche */
+.swiper-button-prev {
+  left: var(--swiper-navigation-sides-offset);
+}
+
+/* Place la flèche de droite */
+.swiper-button-next {
+  right: var(--swiper-navigation-sides-offset);
+}
+
+/* Icône de la flèche (pseudo-élément) : plus grande et plus épaisse */
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 2.2rem;
+  /* Légèrement plus grande */
+  font-weight: 900;
+  /* Rend la flèche plus “épaisse” */
+  color: var(--swiper-navigation-color);
+  text-shadow:
+    0 0 6px #7476ff,
+    0 0 12px #0408fb;
+  /* Effet néon */
+  transition: text-shadow 0.3s ease, color 0.3s ease;
+}
+
+/* Au survol : on agrandit et on passe en doré */
+.swiper-button-prev:hover::after,
+.swiper-button-next:hover::after {
+  transform: scale(1.2);
+  color: #ffd700;
+  /* Doré pour effet “wow” */
+  text-shadow:
+    0 0 8px #ffd700,
+    0 0 16px #ffd700;
+}

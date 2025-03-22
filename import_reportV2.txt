@@ -1,0 +1,237 @@
+21/03/2025 22:08
+
+
+root@vps-7a7713b3:/home/ubuntu/backup_du_site# chmod +x /home/ubuntu/site1/verify_project_structure.sh
+chmod +x /home/ubuntu/site1/verify_structure.sh
+/home/ubuntu/site1/verify_project_structure.sh
+/home/ubuntu/site1/verify_structure.sh
+=== Génération du rapport de la structure du projet ===
+Projet: /home/ubuntu/site1
+Fichier de sortie: /home/ubuntu/site1/project_structure.txt
+=== Rapport généré dans : /home/ubuntu/site1/project_structure.txt ===
+=== Vérification de la structure du projet dans : /home/ubuntu/site1 ===
+
+Vérification des fichiers essentiels à la racine :
+OK: README.md existe.
+OK: package.json existe.
+OK: package-lock.json existe.
+
+Vérification des dossiers essentiels à la racine :
+OK: node_modules existe.
+OK: public existe.
+OK: src existe.
+
+Contenu du dossier public :
+total 36
+-rwxr-xr-x 1 ubuntu ubuntu 3870 Mar  5 11:43 favicon.ico
+-rwxr-xr-x 1 ubuntu ubuntu 1721 Mar  5 11:43 index.html
+-rwxr-xr-x 1 ubuntu ubuntu 5347 Mar  5 11:43 logo192.png
+-rwxr-xr-x 1 ubuntu ubuntu 9664 Mar  5 11:43 logo512.png
+-rwxr-xr-x 1 ubuntu ubuntu  492 Mar  5 11:43 manifest.json
+-rwxr-xr-x 1 ubuntu ubuntu   67 Mar  5 11:43 robots.txt
+
+Contenu du dossier src :
+total 68
+-rwxr-xr-x  1 ubuntu ubuntu 1922 Mar  9 05:58 App.jsx
+-rwxr-xr-x  1 ubuntu ubuntu  708 Mar  5 11:43 AuthContext.js
+-rwxr-xr-x  1 ubuntu ubuntu  365 Mar  5 11:43 ProtectedRoute.jsx
+drwxr-sr-x  3 ubuntu ubuntu 4096 Mar 10 20:31 assets
+drwxr-sr-x 14 ubuntu ubuntu 4096 Mar 10 14:18 components
+drwxr-sr-x  2 ubuntu ubuntu 4096 Mar 10 14:19 context
+drwxr-sr-x  2 ubuntu ubuntu 4096 Mar 10 21:39 data
+-rwxr-xr-x  1 ubuntu ubuntu  366 Mar  5 11:43 index.css
+-rwxr-xr-x  1 ubuntu ubuntu  562 Mar  5 11:43 index.jsx
+-rwxr-xr-x  1 ubuntu ubuntu 2632 Mar  5 11:43 logo.svg
+drwxr-sr-x 10 ubuntu ubuntu 4096 Mar  8 01:12 pages
+-rwxr-xr-x  1 ubuntu ubuntu  362 Mar  5 11:43 reportWebVitals.js
+drwxr-sr-x  2 ubuntu ubuntu 4096 Mar  7 09:51 scss
+-rwxr-xr-x  1 ubuntu ubuntu  286 Mar 11 12:36 secret.js
+drwxr-sr-x  2 ubuntu ubuntu 4096 Mar 10 20:55 services
+-rwxr-xr-x  1 ubuntu ubuntu  241 Mar  5 11:43 setupTests.js
+drwxr-sr-x  2 ubuntu ubuntu 4096 Mar 10 20:29 styles
+
+Vérification des fichiers critiques dans src :
+OK: src/App.jsx existe.
+OK: src/index.jsx existe.
+OK: src/index.css existe.
+OK: src/secret.js existe.
+
+Vérification des dossiers critiques dans src :
+OK: src/components existe.
+OK: src/pages existe.
+OK: src/scss existe.
+OK: src/services existe.
+
+Génération du rapport des importations dans le dossier src...
+Le rapport d'importation a été sauvegardé dans /home/ubuntu/site1/import_report.txt
+Nombre total de lignes d'importation trouvées : 154
+
+Arborescence du projet (tree, sans node_modules) :
+/home/ubuntu/site1
+├── ANCIEN_project_structure_V1.txt
+├── Commande"backupmysite"_PourSauvergarderBackupRapidement
+├── README.md
+├── ancien_sortie_V1.txt
+├── capture.js
+├── import_report.txt
+├── nouvelle_structure_SCR.txt
+├── package-lock.json
+├── package.json
+├── project_structure.txt
+├── project_structure_V2.txt
+├── project_structure_V3.txt
+├── public
+│   ├── favicon.ico
+│   ├── index.html
+│   ├── logo192.png
+│   ├── logo512.png
+│   ├── manifest.json
+│   └── robots.txt
+├── src
+│   ├── App.jsx
+│   ├── AuthContext.js
+│   ├── ProtectedRoute.jsx
+│   ├── assets
+│   │   └── fonts
+│   │       ├── ChampagneLimousines.ttf
+│   │       ├── CoffeCake.ttf
+│   │       ├── Monotone.ttf
+│   │       ├── NeonWorld.ttf
+│   │       ├── PeanutButter.ttf
+│   │       ├── Quicksand.ttf
+│   │       └── ShadowsIntoLight.ttf
+│   ├── components
+│   │   ├── BannerHero
+│   │   │   ├── BannerHero.jsx
+│   │   │   ├── BannerHero.scss
+│   │   │   └── index.jsx
+│   │   ├── Carousel
+│   │   │   ├── Carousel.jsx
+│   │   │   ├── Carousel.scss
+│   │   │   └── index.jsx
+│   │   ├── CarteComponent
+│   │   │   ├── CartPageComponent.jsx
+│   │   │   ├── _cart.scss
+│   │   │   └── index.jsx
+│   │   ├── Collapsible
+│   │   │   ├── CollapsibleRow.jsx
+│   │   │   ├── CollapsibleRows.jsx
+│   │   │   ├── _collapsible.scss
+│   │   │   └── index.jsx
+│   │   ├── ContactIdeaComponent
+│   │   │   ├── ContactIdeaComponent.jsx
+│   │   │   ├── Idea.scss
+│   │   │   └── index.jsx
+│   │   ├── CustomizeNeonComponent
+│   │   │   ├── CustomizeNeonComponent.jsx
+│   │   │   ├── _customize-neon.scss
+│   │   │   └── index.jsx
+│   │   ├── Forms
+│   │   │   ├── ContactIdeaForm
+│   │   │   │   ├── ContactIdeaForm.jsx
+│   │   │   │   ├── _contact.scss
+│   │   │   │   ├── a
+│   │   │   │   ├── index.jsx
+│   │   │   │   └── suppr
+│   │   │   └── Newsletter
+│   │   │       ├── Newsletter.jsx
+│   │   │       ├── _newsletter.scss
+│   │   │       └── index.jsx
+│   │   ├── HeaderFooter
+│   │   │   ├── Footer
+│   │   │   │   ├── Footer.jsx
+│   │   │   │   ├── _footer.scss
+│   │   │   │   └── index.jsx
+│   │   │   └── Header
+│   │   │       ├── Header.jsx
+│   │   │       ├── _header.scss
+│   │   │       └── index.jsx
+│   │   ├── ImageWithText
+│   │   │   ├── ImageWithText.jsx
+│   │   │   ├── _image-text.scss
+│   │   │   └── index.jsx
+│   │   ├── Productpage
+│   │   │   └── index.jsx
+│   │   ├── ShoppingBag_PasUtileMaintenant
+│   │   │   ├── ShoppingBag.jsx
+│   │   │   ├── ShoppingBag.scss
+│   │   │   ├── index.jsx
+│   │   │   └── pourcomprendre.txt
+│   │   └── ThreeRows
+│   │       ├── ThreeRows.jsx
+│   │       ├── ThreeRows.scss
+│   │       └── index.jsx
+│   ├── context
+│   │   └── CarteContext.jsx
+│   ├── data
+│   │   ├── colors.json
+│   │   ├── misdecotepourtest.json
+│   │   ├── panelRules.json
+│   │   ├── polices.json
+│   │   ├── pricingRules.json
+│   │   ├── shopProducts.json
+│   │   └── testSubmissions.json
+│   ├── index.css
+│   ├── index.jsx
+│   ├── logo.svg
+│   ├── pages
+│   │   ├── Admin
+│   │   │   ├── AdminDashboard
+│   │   │   │   ├── AdminDashboard.jsx
+│   │   │   │   ├── _admin-dashboard.scss
+│   │   │   │   └── index.jsx
+│   │   │   └── AdminLogin
+│   │   │       ├── AdminLogin.jsx
+│   │   │       ├── _admin-login.scss
+│   │   │       └── index.jsx
+│   │   ├── Cart
+│   │   │   ├── CartPage.jsx
+│   │   │   └── index.jsx
+│   │   ├── Checkout
+│   │   │   ├── CheckoutPage.jsx
+│   │   │   ├── _checkout.scss
+│   │   │   └── index.jsx
+│   │   ├── ContactIdea
+│   │   │   ├── ContactIdeaPage.jsx
+│   │   │   └── index.jsx
+│   │   ├── Customize
+│   │   │   ├── CustomizeNeonPage.jsx
+│   │   │   └── index.jsx
+│   │   ├── Home
+│   │   │   ├── HomePage.jsx
+│   │   │   └── index.jsx
+│   │   ├── Product
+│   │   │   ├── ProductPage.jsx
+│   │   │   ├── ProductPage.scss
+│   │   │   └── index.Jsx
+│   │   └── Shop
+│   │       ├── ShopPage.jsx
+│   │       ├── ShopPage.scss
+│   │       └── index.jsx
+│   ├── reportWebVitals.js
+│   ├── scss
+│   │   ├── App.scss
+│   │   ├── ShopPage.scss
+│   │   ├── _admin.scss
+│   │   ├── _buttons.scss
+│   │   ├── _product.scss
+│   │   ├── _variables.scss
+│   │   ├── main.scss
+│   │   └── mixins.scss
+│   ├── secret.js
+│   ├── services
+│   │   ├── cartService.js
+│   │   ├── dataService.js
+│   │   ├── dbService.js
+│   │   └── productService.js
+│   ├── setupTests.js
+│   └── styles
+│       └── fonts.scss
+├── udo apt update
+├── udo sysctl -p
+├── verify_project_structure.sh
+└── verify_structure.sh
+
+40 directories, 124 files
+
+=== Vérification terminée ===

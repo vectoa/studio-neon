@@ -1,0 +1,10 @@
+[
+  { "name": "Helvetica", "displayName": "Helvetica", "extraCost": 0 },
+  { "name": "Arial", "displayName": "Arial", "extraCost": 1 },
+  { "name": "CoffeCake", "displayName": "CoffeCake", "extraCost": 2 },
+  { "name": "ChampagneLimousines", "displayName": "Champagne Limousines", "extraCost": 2 },
+  { "name": "NeonWorld", "displayName": "Neon World", "extraCost": 3 },
+  { "name": "ShadowsIntoLight", "displayName": "Shadows Into Light", "extraCost": 2 },
+  { "name": "Quicksand", "displayName": "Quicksand", "extraCost": 1 },
+  { "name": "PeanutButter", "displayName": "Peanut Butter", "extraCost": 3 }
+]

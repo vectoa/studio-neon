@@ -1,0 +1,96 @@
+.contact-idea-page {
+  max-width: 700px;
+  margin: 60px auto;
+  padding: 30px;
+  font-family: 'Mali', sans-serif;
+  color: #fff;
+  background-color: rgba(0,0,0,0.9);
+  border-radius: 12px;
+  box-shadow:
+    0 0 10px #7476ff,
+    0 0 20px #0408fb;
+
+  h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    text-shadow:
+      0 0 5px #7476ff,
+      0 0 10px #0408fb;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    label {
+      font-weight: bold;
+      font-size: 1rem;
+      text-shadow: 0 0 6px #7476ff;
+    }
+
+    input,
+    textarea {
+      background: #1a1a1a;
+      border: 2px solid #7476ff;
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 1rem;
+      color: #fff;
+      transition: border 0.3s ease, box-shadow 0.3s ease;
+
+      &:focus {
+        border-color: #0408fb;
+        box-shadow:
+          0 0 6px #7476ff,
+          0 0 12px #0408fb;
+        outline: none;
+      }
+    }
+
+    input[type="file"] {
+      border: none;
+      padding: 0;
+      background: transparent;
+    }
+
+    .neon-button {
+      align-self: center;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      color: #fff;
+      background-color: transparent;
+      border: 2px solid #7476ff;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow:
+        0 0 6px #7476ff,
+        0 0 12px #0408fb;
+
+      &:hover {
+        background-color: #7476ff;
+        box-shadow:
+          0 0 12px #7476ff,
+          0 0 24px #0408fb;
+        transform: scale(1.05);
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-idea-page {
+    max-width: 90%;
+    padding: 20px;
+  }
+
+  .neon-button {
+    width: 100%;
+  }
+}

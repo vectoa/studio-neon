@@ -1,0 +1,7 @@
+{
+    "panels": {
+      "opaque": { "displayName": "Opaque", "extraCost": 0 },
+      "transparent": { "displayName": "Transparent", "extraCost": 0.11 }
+    }
+  }
+  

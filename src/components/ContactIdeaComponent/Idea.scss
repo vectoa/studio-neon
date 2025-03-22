@@ -1,0 +1,99 @@
+// src/components/IdeaComponent/Idea.scss
+.idea-page {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #000;
+  border-radius: 12px;
+  box-shadow:
+    0 0 6px #7476ff,
+    0 0 12px #7476ff,
+    inset 0 0 4px #0408fb;
+  color: #fff;
+  font-family: 'Mali', sans-serif;
+
+  h2 {
+    text-align: center;
+    font-size: 2rem;
+    text-shadow: 0 0 8px #7476ff;
+    margin-bottom: 20px;
+  }
+
+  .idea-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    label {
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 4px #7476ff;
+    }
+
+    input,
+    textarea {
+      border: 2px solid #7476ff;
+      border-radius: 8px;
+      padding: 10px;
+      background-color: #222;
+      color: #fff;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+      &:focus {
+        border-color: #0408fb;
+        box-shadow: 0 0 8px #0408fb;
+        outline: none;
+      }
+    }
+
+    input[type="file"] {
+      border: none;
+      padding: 5px 0;
+      background-color: transparent;
+    }
+
+    button {
+      background-color: #7476ff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+      &:hover {
+        background-color: #0408fb;
+        transform: translateY(-3px);
+        box-shadow:
+          0 0 10px #0408fb,
+          0 0 20px #0408fb;
+      }
+    }
+  }
+}
+
+// Responsive pour téléphone
+@media (max-width: 600px) {
+  .idea-page {
+    max-width: 90%;
+    padding: 15px;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    .idea-form {
+      gap: 12px;
+
+      input,
+      textarea {
+        padding: 8px;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}

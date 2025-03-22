@@ -1,0 +1,90 @@
+.banner-hero {
+  width: 100%;
+  height: 400px;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  font-family: 'Mali', sans-serif;
+
+  .banner-content {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow:
+      0 0 6px 1px #7476ff,
+      0 0 12px 3px #7476ff,
+      0 0 18px 4px #0408fb;
+
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 0 0 8px #7476ff;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      max-width: 600px;
+      text-shadow: 0 0 5px #7476ff;
+    }
+
+    .banner-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin-top: 15px;
+
+      button {
+        width: 100%;
+        max-width: 400px;
+        padding: 10px 20px;
+        background-color: #7476ff;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 1rem;
+        border-radius: 8px;
+        transition: background 0.3s, transform 0.2s;
+        box-shadow:
+          0 0 8px #7476ff,
+          0 0 16px #0408fb;
+
+        &:hover {
+          background-color: #5a5eff;
+          transform: scale(1.05);
+          box-shadow:
+            0 0 12px #7476ff,
+            0 0 24px #0408fb;
+        }
+      }
+    }
+  }
+
+  // 📱 Optimisation mobile
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 40px 20px;
+
+    .banner-content {
+      padding: 15px;
+      h2 {
+        font-size: 2rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+      .banner-buttons button {
+        font-size: 0.9rem;
+        width: 100%;
+      }
+    }
+  }
+}

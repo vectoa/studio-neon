@@ -1,0 +1,10 @@
+/* /home/ubuntu/site1/src/components/ShoppingBag/ShoppingBag.scss */
+
+.shopping-bag-icon {
+    /* Exemple de style additionnel si nécessaire */
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}

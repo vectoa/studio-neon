@@ -1,0 +1,10 @@
+la j'ai juste creer le components au cas ou on auraitbesoin de les reutiliser mais deja le header.jsx fonctionnne et 
+cest plus rapide de mettre les svg dans le headerjsx le plus important cest davancer dans le site ! 
+eviter les Erreur fréquente :
+Certains débutants pensent qu'il faut créer un container pour chaque icône. En réalité, 
+chaque icône peut être un composant autonome et être utilisée directement dans un composant parent (exemple : un menu ou un header).
+ On n'a pas besoin de container supplémentaire pour chaque icône, mais il est souvent judicieux de les regrouper 
+ dans un composant qui gère l'agencement (par exemple, un composant "NavBar" qui contient plusieurs icônes).
+
+on a pas 20 icônes
+donc cest trkl

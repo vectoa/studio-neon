@@ -1,0 +1,25 @@
+@import 'variables';
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background: #0B1741;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background: #162A64;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    background: #09122B;
+    transform: scale(0.98);
+  }
+}
+

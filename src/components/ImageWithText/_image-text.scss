@@ -1,0 +1,80 @@
+.image-with-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent; // ✅ Suppression du fond blanc
+  margin: 40px auto;
+  padding: 20px;
+  max-width: 1000px;
+  gap: 20px;
+  flex-wrap: wrap;
+
+  &__img {
+    width: 100%;
+    max-width: 350px;
+    border-radius: 12px;
+    box-shadow: 
+      0 0 10px rgba(0, 0, 255, 0.4),
+      0 0 20px rgba(0, 0, 255, 0.2);
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  .content {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow:
+      0 0 8px rgba(0, 123, 255, 0.6),
+      inset 0 0 8px rgba(0, 123, 255, 0.4);
+
+    h3 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      text-shadow: 0 0 6px rgba(0, 123, 255, 0.7);
+    }
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    .neon-button {
+      background: transparent;
+      border: 2px solid #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #007bff, inset 0 0 10px #007bff;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: #007bff;
+        box-shadow: 0 0 20px #00aaff, inset 0 0 10px #005eff;
+      }
+    }
+  }
+}
+
+// ✅ Responsive Mobile
+@media (max-width: 768px) {
+  .image-with-text {
+    flex-direction: column;
+    padding: 10px;
+
+    &__img {
+      margin-bottom: 20px;
+    }
+
+    .content {
+      width: 100%;
+      text-align: center;
+    }
+  }
+}

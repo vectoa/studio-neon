@@ -1,0 +1,3661 @@
+
+
+Fichier: src/App.jsx
+Code:
+// src/App.jsx
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import Header from './components/HeaderFooter/Header';
+import Footer from './components/HeaderFooter/Footer';
+
+import { AuthProvider } from './AuthContext';
+import ProtectedRoute from './ProtectedRoute';
+
+import HomePage from './pages/Home/HomePage';
+import AdminDashboard from './pages/Admin/AdminDashboard/AdminDashboard';
+import AdminLogin from './pages/Admin/AdminLogin/AdminLogin';
+
+
+
+import ShopPage from './pages/Shop/ShopPage';
+import CustomizeNeonPage from './pages/Customize/CustomizeNeonPage';
+import ContactIdeaPage from './pages/ContactIdea/ContactIdeaPage';
+import CartPage from './pages/Cart';
+import CheckoutPage from './pages/Checkout/CheckoutPage';
+import ProductPage from './pages/Product/ProductPage';
+
+
+import './scss/App.scss';
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+      <Header />
+        <main>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/shop" element={<ShopPage />} />
+            <Route path="/customize" element={<CustomizeNeonPage />} />
+            <Route path="/contact-idea" element={<ContactIdeaPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/product/:id" element={<ProductPage />} />
+            
+
+            {/* Page de login admin */}
+            <Route path="/admin-login" element={<AdminLogin />} />
+
+            {/* Page admin protégée */}
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </main>
+        <Footer />
+      </Router>
+    </AuthProvider>
+  );
+}
+
+export default App;
+
+--------------------
+
+Fichier: src/AuthContext.js
+Code:
+// src/AuthContext.js
+import React, { createContext, useState, useContext } from 'react';
+import { ADMIN_PASSWORD } from './secret';
+
+const AuthContext = createContext();
+
+export function AuthProvider({ children }) {
+  const [authenticated, setAuthenticated] = useState(false);
+
+  function login(password) {
+    if (password === ADMIN_PASSWORD) {
+      setAuthenticated(true);
+      return true;
+    }
+    return false;
+  }
+
+  function logout() {
+    setAuthenticated(false);
+  }
+
+  return (
+    <AuthContext.Provider value={{ authenticated, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth() {
+  return useContext(AuthContext);
+}
+
+--------------------
+
+Fichier: src/ProtectedRoute.jsx
+Code:
+// src/ProtectedRoute.jsx
+import React from 'react';
+import { useAuth } from './AuthContext';
+import { Navigate } from 'react-router-dom';
+
+function ProtectedRoute({ children }) {
+  const { authenticated } = useAuth();
+  if (!authenticated) {
+    return <Navigate to="/admin-login" replace />;
+  }
+  return children;
+}
+
+export default ProtectedRoute;
+
+--------------------
+
+Dossier: src/components
+
+Dossier: src/components/BannerHero
+
+Fichier: src/components/BannerHero/BannerHero.jsx
+Code:
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import './BannerHero.scss';
+
+function BannerHero() {
+  const navigate = useNavigate();
+
+  return (
+    <section className="banner-hero">
+      <div className="banner-content">
+        <h2>Spécialiste du Néon</h2>
+        <p>Découvrez une collection unique et personnalisez votre néon en quelques clics</p>
+        <div className="banner-buttons">
+          <button onClick={() => navigate('/shop')}>
+            Découvrir la boutique
+          </button>
+          <button onClick={() => navigate('/customize')}>
+            Créer mon néon
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default BannerHero;
+
+--------------------
+
+Fichier: src/components/BannerHero/BannerHero.scss
+Code:
+.banner-hero {
+  width: 100%;
+  height: 400px;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  font-family: 'Mali', sans-serif;
+
+  .banner-content {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow:
+      0 0 6px 1px #7476ff,
+      0 0 12px 3px #7476ff,
+      0 0 18px 4px #0408fb;
+
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 0 0 8px #7476ff;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      max-width: 600px;
+      text-shadow: 0 0 5px #7476ff;
+    }
+
+    .banner-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin-top: 15px;
+
+      button {
+        width: 100%;
+        max-width: 400px;
+        padding: 10px 20px;
+        background-color: #7476ff;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 1rem;
+        border-radius: 8px;
+        transition: background 0.3s, transform 0.2s;
+        box-shadow:
+          0 0 8px #7476ff,
+          0 0 16px #0408fb;
+
+        &:hover {
+          background-color: #5a5eff;
+          transform: scale(1.05);
+          box-shadow:
+            0 0 12px #7476ff,
+            0 0 24px #0408fb;
+        }
+      }
+    }
+  }
+
+  // 📱 Optimisation mobile
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 40px 20px;
+
+    .banner-content {
+      padding: 15px;
+      h2 {
+        font-size: 2rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+      .banner-buttons button {
+        font-size: 0.9rem;
+        width: 100%;
+      }
+    }
+  }
+}
+
+--------------------
+
+Fichier: src/components/BannerHero/index.jsx
+Code:
+import BannerHero from './BannerHero';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default BannerHero;
+
+--------------------
+
+Dossier: src/components/Carousel
+
+Fichier: src/components/Carousel/Carousel.jsx
+Code:
+// src/components/Carousel/Carousel.jsx
+import React, { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Navigation } from "swiper/modules";
+import { Link } from 'react-router-dom';
+import "./Carousel.scss";
+import { getShopProducts } from "../../services/dataService";
+
+const Carousel = () => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const data = getShopProducts();
+    setProducts(data);
+  }, []);
+
+  return (
+    <section className="carousel-section">
+      <h2 className="carousel-title">Nos Néons Prêts à l'Emploi</h2>
+      <Swiper
+        navigation
+        modules={[Navigation]}
+        spaceBetween={20}
+        slidesPerView={3}
+        breakpoints={{
+          768: { slidesPerView: 2 },
+          480: { slidesPerView: 1 },
+        }}
+      >
+        {products.map((product) => (
+          <SwiperSlide key={product.id} className="carousel-item">
+            <img src={product.image} alt={product.name} />
+            <h3>{product.name}</h3>
+            <p className="price">{product.price} €</p>
+            <Link to={`/product/${product.id}`} className="buy-btn">
+              Acheter
+            </Link>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </section>
+  );
+};
+
+export default Carousel;
+
+--------------------
+
+Fichier: src/components/Carousel/Carousel.scss
+Code:
+@import '../../scss/_variables';
+
+.carousel-section {
+  text-align: center;
+  padding: 2rem;
+  background: #000;
+  font-family: 'Mali', sans-serif;
+  color: #fff;
+
+  .carousel-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #fff;
+    text-shadow:
+      0 0 8px #7476ff,
+      0 0 16px #0408fb;
+  }
+
+  .swiper {
+    width: 100%;
+    padding: 1rem 0;
+  }
+
+  .carousel-item {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow:
+      0 0 6px #7476ff,
+      0 0 12px #0408fb;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    img {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 5px;
+      border: 1px solid #7476ff;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      margin: 0.5rem 0;
+      text-shadow: 0 0 8px #7476ff;
+    }
+
+    .price {
+      color: #FFD700;
+      font-weight: bold;
+      font-size: 1.2rem;
+      text-shadow: 0 0 6px #FFD700;
+    }
+
+    .buy-btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 16px;
+      background-color: #7476ff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s ease;
+      box-shadow:
+        0 0 6px #7476ff,
+        0 0 12px #0408fb;
+
+      &:hover {
+        background: #0408fb;
+        transform: translateY(-3px);
+        box-shadow:
+          0 0 8px #7476ff,
+          0 0 16px #0408fb;
+      }
+    }
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow:
+        0 0 8px #7476ff,
+        0 0 16px #0408fb;
+    }
+  }
+
+  // Responsive optimisé
+  @media (max-width: 1024px) {
+    .swiper {
+      width: 100%;
+    }
+
+    .carousel-item {
+      img {
+        max-height: 150px;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .carousel-title {
+      font-size: 1.8rem;
+    }
+
+    .swiper {
+      width: 100%;
+    }
+
+    .carousel-item {
+      img {
+        max-height: 120px;
+      }
+
+      h3 {
+        font-size: 1rem;
+      }
+
+      .price {
+        font-size: 1rem;
+      }
+
+      .buy-btn {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    .carousel-title {
+      font-size: 1.5rem;
+    }
+
+    .swiper {
+      width: 100%;
+    }
+
+    .carousel-item {
+      img {
+        max-height: 130px;
+      }
+    }
+  }
+}
+
+
+--------------------
+
+Fichier: src/components/Carousel/index.jsx
+Code:
+import Carousel from './Carousel';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default Carousel;
+
+--------------------
+
+Dossier: src/components/CarteComponent
+
+Fichier: src/components/CarteComponent/CartPageComponent.jsx
+Code:
+// site1/src/components/CartPageComponent.jsx
+import React, { useState } from 'react';
+import './_cart.scss';
+import { Link } from 'react-router-dom';
+
+function CartPageComponent() {
+  const [items, setItems] = useState([]);
+
+  const increment = (id) => {
+    setItems(items.map(item => item.id === id ? { ...item, quantity: item.quantity + 1 } : item));
+  };
+
+  const decrement = (id) => {
+    setItems(items.map(item => item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item));
+  };
+
+  const removeItem = (id) => {
+    setItems(items.filter(item => item.id !== id));
+  };
+
+  const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0);
+
+  return (
+    <div className="cart-page">
+      <div className="cart-header">
+        <h2>🛒 Votre panier</h2>
+        <Link to="/shop">← Continuer les achats</Link>
+      </div>
+      
+      {items.length === 0 ? (
+        <p className="empty-cart">Votre panier est vide.</p>
+      ) : (
+        <>
+          <div className="cart-table">
+            <div className="cart-row cart-header-row">
+              <span>Produit</span>
+              <span>Quantité</span>
+              <span>Total</span>
+            </div>
+
+            {items.map(item => (
+              <div key={item.id} className="cart-row">
+                <div className="product-info">
+                  <p className="product-name">{item.name}</p>
+                  <p className="product-price">{item.price.toFixed(2)} €</p>
+                </div>
+
+                <div className="quantity-control">
+                  <button onClick={() => decrement(item.id)}>-</button>
+                  <span>{item.quantity}</span>
+                  <button onClick={() => increment(item.id)}>+</button>
+                  <button className="remove-item" onClick={() => removeItem(item.id)}>🗑️</button>
+                </div>
+
+                <div className="product-total">
+                  {(item.price * item.quantity).toFixed(2)} €
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="cart-summary">
+            <p>Total estimé : <span>{totalPrice.toFixed(2)} €</span></p>
+            <p className="small-note">Taxes incluses. Rabais et frais de port calculés lors du paiement.</p>
+            <button className="checkout-btn">Valider la commande</button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+export default CartPageComponent;
+
+--------------------
+
+Fichier: src/components/CarteComponent/_cart.scss
+Code:
+// src/scss/_cart.scss
+
+.cart-page {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #000;
+  color: #fff;
+  font-family: 'Mali', sans-serif;
+  border-radius: 12px;
+  box-shadow:
+    0 0 8px #7476ff,
+    0 0 15px #0408fb,
+    inset 0 0 5px #0408fb;
+
+  .cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+
+    h2 {
+      font-size: 2rem;
+      text-shadow: 0 0 10px #7476ff;
+    }
+
+    a {
+      color: #7476ff;
+      transition: color 0.3s;
+      &:hover {
+        color: #FFD700;
+      }
+    }
+  }
+
+  .cart-table {
+    border-top: 2px solid #7476ff;
+    border-bottom: 2px solid #7476ff;
+
+    .cart-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      padding: 15px 0;
+      align-items: center;
+      border-bottom: 1px solid rgba(116,118,255,0.3);
+
+      &.cart-header-row {
+        font-size: 0.9rem;
+        opacity: 0.8;
+      }
+
+      .product-info {
+        .product-name {
+          font-weight: bold;
+          color: #FFD700;
+          text-shadow: 0 0 5px #FFD700;
+        }
+
+        .product-price {
+          opacity: 0.7;
+        }
+      }
+
+      .quantity-control {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        button {
+          width: 30px;
+          height: 30px;
+          border: 1px solid #7476ff;
+          background: transparent;
+          border-radius: 50%;
+          color: #fff;
+          cursor: pointer;
+          transition: background 0.3s, box-shadow 0.3s;
+
+          &:hover {
+            background: #7476ff;
+            box-shadow: 0 0 10px #7476ff;
+          }
+        }
+
+        .remove-item {
+          border: none;
+          background: transparent;
+          font-size: 1.2rem;
+          cursor: pointer;
+          transition: color 0.3s;
+
+          &:hover {
+            color: #ff4242;
+          }
+        }
+      }
+
+      .product-total {
+        text-align: right;
+        font-weight: bold;
+        color: #FFD700;
+      }
+    }
+  }
+
+  .cart-summary {
+    text-align: right;
+    margin-top: 20px;
+
+    p {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+
+      span {
+        color: #FFD700;
+        text-shadow: 0 0 5px #FFD700;
+      }
+    }
+
+    .small-note {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      margin-bottom: 20px;
+    }
+
+    .checkout-btn {
+      background-color: #7476ff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s;
+
+      &:hover {
+        background-color: #0408fb;
+        box-shadow: 0 0 10px #0408fb, 0 0 20px #0408fb;
+      }
+    }
+  }
+
+  .empty-cart {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #7476ff;
+    text-shadow: 0 0 8px #7476ff;
+  }
+}
+
+// ✅ Responsive téléphone
+@media (max-width: 600px) {
+  .cart-page {
+    padding: 15px;
+    width: 95%;
+
+    .cart-row {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      text-align: center;
+
+      .quantity-control {
+        justify-content: center;
+      }
+
+      .product-total {
+        text-align: center;
+      }
+    }
+
+    .cart-summary {
+      text-align: center;
+      .checkout-btn {
+        width: 100%;
+      }
+    }
+  }
+}
+
+--------------------
+
+Fichier: src/components/CarteComponent/index.jsx
+Code:
+import CartPageComponent from './CartPageComponent';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default CartPageComponent;
+
+--------------------
+
+Dossier: src/components/Collapsible
+
+Fichier: src/components/Collapsible/CollapsibleRow.jsx
+Code:
+// site1/src/components/Collapsible/CollapsibleRow.jsx
+import React, { useState, useRef, useEffect } from 'react';
+
+function CollapsibleRow({ title, children }) {
+  const [open, setOpen] = useState(false);
+  const contentRef = useRef(null);
+  const [maxHeight, setMaxHeight] = useState('0px');
+
+  useEffect(() => {
+    setMaxHeight(open ? `${contentRef.current.scrollHeight}px` : '0px');
+  }, [open, children]);
+
+  return (
+    <div className={`studio-collapsible-row ${open ? "open" : ""}`} onClick={() => setOpen(!open)}>
+      <div className="studio-collapsible-header">
+        <span className="studio-collapsible-icon">{open ? '✔️' : '☐'}</span>
+        <span className="studio-collapsible-title">{title}</span>
+        <span className={`studio-arrow ${open ? "open" : ""}`} style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
+      </div>
+      <div
+        ref={contentRef}
+        className={`studio-collapsible-content ${open ? "open" : ""}`}
+        style={{ maxHeight: maxHeight }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+export default CollapsibleRow;
+
+--------------------
+
+Fichier: src/components/Collapsible/CollapsibleRows.jsx
+Code:
+// site1/src/components/Collapsible/CollapsibleRows.jsx
+import React from 'react';
+import CollapsibleRow from './CollapsibleRow';
+import './_collapsible.scss';
+
+function CollapsibleRows() {
+  return (
+    <section className="studio-collapsible-section">
+      <h2>Questions Fréquentes</h2>
+      <CollapsibleRow title="Pourquoi choisir nos néons ?">
+        <ul>
+          <li>Fabrication de haute qualité avec matériaux durables.</li>
+          <li>Garantie 1 an incluse.</li>
+          <li>Service client réactif et attentif.</li>
+        </ul>
+      </CollapsibleRow>
+      <CollapsibleRow title="Quelles tailles et couleurs disponibles ?">
+        <ul>
+          <li>Tailles : de 50 cm à 300 cm.</li>
+          <li>Couleurs : 14 options vibrantes adaptées à tous les styles.</li>
+        </ul>
+      </CollapsibleRow>
+      <CollapsibleRow title="Quels sont les délais de livraison ?">
+        <ul>
+          <li>Production rapide : 4 à 6 jours ouvrés.</li>
+          <li>Livraison en France sous 7 à 13 jours.</li>
+        </ul>
+      </CollapsibleRow>
+      <CollapsibleRow title="Que faire en cas de problème ?">
+        <ul>
+          <li>Garantie d’un an contre tout défaut.</li>
+          <li>Remplacement ou remboursement en cas de dommages à la livraison.</li>
+        </ul>
+      </CollapsibleRow>
+    </section>
+  );
+}
+
+export default CollapsibleRows;
+
+--------------------
+
+Fichier: src/components/Collapsible/_collapsible.scss
+Code:
+.studio-collapsible-section {
+  width: 100%;                 // ✅ prend toute la largeur disponible
+  max-width: 100%;             // ✅ garantit aucun dépassement
+  margin: 0;                   // ✅ enlève les marges auto
+  padding: 40px 20px;          // ✅ ajuste le padding pour une meilleure présentation
+  background-color: #000;      // fond noir complet
+  color: #fff;
+  font-family: "Mali", sans-serif;
+  box-sizing: border-box;
+
+  display: flex;               // ✅ Flexbox pour centrer proprement le contenu
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    text-shadow:
+      0 0 6px #7476ff,
+      0 0 12px #0408fb;
+  }
+
+  .studio-collapsible-row {
+    width: 100%;               // ✅ occupe toute la largeur
+    max-width: 700px;          // ✅ largeur maximale uniquement pour les rangées
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px 0;
+    cursor: pointer;
+    transition: background 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    &.open .studio-collapsible-title {
+      color: #FFD700;
+      text-shadow: 0 0 8px #FFD700;
+    }
+  }
+
+  .studio-collapsible-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.1rem;
+    color: #fff;
+
+    .studio-collapsible-icon {
+      font-size: 1.3rem;
+      margin-right: 8px;
+    }
+
+    .studio-arrow {
+      transition: transform 0.3s;
+      font-size: 1.2rem;
+    }
+  }
+
+  .studio-collapsible-content {
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.3s ease;
+    opacity: 0;
+    max-height: 0;
+    padding: 0 10px;
+    text-align: left;
+    font-size: 1rem;
+
+    &.open {
+      opacity: 1;
+      padding: 15px 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 10px;
+
+      li {
+        margin-bottom: 8px;
+
+        &::before {
+          content: "•";
+          color: #FFD700;
+          margin-right: 8px;
+          text-shadow: 0 0 8px #FFD700;
+        }
+      }
+    }
+  }
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+  .studio-collapsible-section {
+    padding: 20px 10px;
+
+    h2 {
+      font-size: 1.6rem;
+    }
+  }
+}
+
+--------------------
+
+Fichier: src/components/Collapsible/index.jsx
+Code:
+import Collapsible from './CollapsibleRow';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default Collapsible;
+
+--------------------
+
+Dossier: src/components/ContactIdeaComponent
+
+Fichier: src/components/ContactIdeaComponent/ContactIdeaComponent.jsx
+Code:
+// src/components/IdeaComponent/ContactIdeaComponent.jsx
+import React, { useState } from 'react';
+import './Idea.scss';
+
+function ContactIdeaComponent() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [idea, setIdea] = useState('');
+  const [file, setFile] = useState(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert(`Projet envoyé: ${name}, ${email}, ${idea}, fichier : ${file?.name || 'aucun'}`);
+    // TODO: API pour sauvegarde ou envoi
+  };
+
+  return (
+    <div className="idea-page">
+      <h2>Envoyez-nous votre idée/projet</h2>
+      <form className="idea-form" onSubmit={handleSubmit}>
+        <label>Nom</label>
+        <input value={name} onChange={(e) => setName(e.target.value)} required />
+
+        <label>Email</label>
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+
+        <label>Description du projet</label>
+        <textarea value={idea} onChange={(e) => setIdea(e.target.value)} rows={4} required />
+
+        <label>Logo/Photo (optionnel)</label>
+        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+
+        <button type="submit">Envoyer</button>
+      </form>
+    </div>
+  );
+}
+
+export default ContactIdeaComponent;
+
+--------------------
+
+Fichier: src/components/ContactIdeaComponent/Idea.scss
+Code:
+// src/components/IdeaComponent/Idea.scss
+.idea-page {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #000;
+  border-radius: 12px;
+  box-shadow:
+    0 0 6px #7476ff,
+    0 0 12px #7476ff,
+    inset 0 0 4px #0408fb;
+  color: #fff;
+  font-family: 'Mali', sans-serif;
+
+  h2 {
+    text-align: center;
+    font-size: 2rem;
+    text-shadow: 0 0 8px #7476ff;
+    margin-bottom: 20px;
+  }
+
+  .idea-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    label {
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 4px #7476ff;
+    }
+
+    input,
+    textarea {
+      border: 2px solid #7476ff;
+      border-radius: 8px;
+      padding: 10px;
+      background-color: #222;
+      color: #fff;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+      &:focus {
+        border-color: #0408fb;
+        box-shadow: 0 0 8px #0408fb;
+        outline: none;
+      }
+    }
+
+    input[type="file"] {
+      border: none;
+      padding: 5px 0;
+      background-color: transparent;
+    }
+
+    button {
+      background-color: #7476ff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+      &:hover {
+        background-color: #0408fb;
+        transform: translateY(-3px);
+        box-shadow:
+          0 0 10px #0408fb,
+          0 0 20px #0408fb;
+      }
+    }
+  }
+}
+
+// Responsive pour téléphone
+@media (max-width: 600px) {
+  .idea-page {
+    max-width: 90%;
+    padding: 15px;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    .idea-form {
+      gap: 12px;
+
+      input,
+      textarea {
+        padding: 8px;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+--------------------
+
+Fichier: src/components/ContactIdeaComponent/index.jsx
+Code:
+import ContactIdeaComponent from './ContactIdeaComponent';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default ContactIdeaComponent;
+
+--------------------
+
+Dossier: src/components/CustomizeNeonComponent
+
+Fichier: src/components/CustomizeNeonComponent/CustomizeNeonComponent.jsx
+Code:
+// src/pages/CustomizeNeonComponent.jsx
+import React, { useState } from 'react';
+import './_customize-neon.scss';
+
+function CustomizeNeonComponent() {
+  const [size, setSize] = useState('50');
+  const [text, setText] = useState('');
+  const [font, setFont] = useState('0');
+  const [color, setColor] = useState('#FF0000');
+  const [panel, setPanel] = useState('0');
+  const pricePerChar = 1;
+
+  const computePrice = () => {
+    const base = parseFloat(size) + text.length * pricePerChar + parseFloat(font);
+    return (panel === '1' ? base * 1.11 : base).toFixed(2);
+  };
+
+  const handleAddToCart = () => {
+    alert(`Néon personnalisé ajouté au panier. Prix: ${computePrice()}€`);
+  };
+
+  return (
+    <div className="customize-neon">
+      <h2>✨ Personnalisez Votre Néon ✨</h2>
+
+      <div className="customize-preview">
+        <div
+          className="preview-box"
+          style={{
+            background: panel === '1' ? 'rgba(0,0,0,0.7)' : '#101010',
+            border: panel === '1' ? '2px dashed rgba(255,255,255,0.5)' : 'none',
+          }}
+        >
+          <span
+            className="preview-text"
+            style={{
+              color: color,
+              fontFamily: font === '10' ? 'Cursive' : 'Helvetica',
+              textShadow: `0 0 8px ${color}, 0 0 15px ${color}, 0 0 20px ${color}`,
+            }}
+          >
+            {text || 'Votre néon ici'}
+          </span>
+        </div>
+      </div>
+
+      <div className="customize-form">
+        <label>Taille</label>
+        <select value={size} onChange={(e) => setSize(e.target.value)}>
+          <option value="50">50cm (+50€)</option>
+          <option value="75">75cm (+75€)</option>
+          <option value="100">100cm (+100€)</option>
+        </select>
+
+        <label>Texte (max 30 caractères)</label>
+        <input
+          type="text"
+          maxLength={30}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+
+        <label>Police</label>
+        <select value={font} onChange={(e) => setFont(e.target.value)}>
+          <option value="0">Helvetica (+0€)</option>
+          <option value="10">Cursive (+10€)</option>
+        </select>
+
+        <label>Couleur</label>
+        <select value={color} onChange={(e) => setColor(e.target.value)}>
+          <option value="#FF0000">Rouge</option>
+          <option value="#FFC0CB">Rose clair</option>
+          <option value="#FFA500">Orange</option>
+          <option value="#FFFF00">Jaune</option>
+          <option value="#FFD700">Gold</option>
+          <option value="#00FF00">Vert</option>
+          <option value="#0000FF">Bleu</option>
+          <option value="#ADD8E6">Bleu glacé</option>
+          <option value="#800080">Violet</option>
+          <option value="#FFFFFF">Blanc froid</option>
+          <option value="#F5DEB3">Blanc chaud</option>
+        </select>
+
+        <label>Type de Panneau</label>
+        <select value={panel} onChange={(e) => setPanel(e.target.value)}>
+          <option value="0">Opaque (+0%)</option>
+          <option value="1">Transparent (+11%)</option>
+        </select>
+
+        <div className="price">
+          Prix: {computePrice()} €
+        </div>
+        <button onClick={handleAddToCart}>Ajouter au panier</button>
+      </div>
+    </div>
+  );
+}
+
+export default CustomizeNeonComponent;
+
+--------------------
+
+Fichier: src/components/CustomizeNeonComponent/_customize-neon.scss
+Code:
+// src/scss/_customize-neon.scss
+.customize-neon {
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #000;
+  color: #fff;
+  font-family: 'Mali', sans-serif;
+  border-radius: 10px;
+  box-shadow: 
+    0 0 8px #7476ff, 
+    0 0 16px #7476ff, 
+    inset 0 0 4px #0408fb;
+
+  h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-shadow: 0 0 8px #7476ff;
+  }
+
+  .customize-preview {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    .preview-box {
+      padding: 20px;
+      border-radius: 8px;
+      min-height: 80px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #101010;
+      transition: box-shadow 0.3s ease;
+
+      .preview-text {
+        font-size: 2rem;
+        text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+      }
+    }
+  }
+
+  .customize-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    label {
+      font-weight: bold;
+      text-shadow: 0 0 5px #7476ff;
+    }
+
+    input, select {
+      padding: 10px;
+      border-radius: 6px;
+      border: 2px solid #7476ff;
+      background: #222;
+      color: #fff;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+
+      &:focus {
+        border-color: #0408fb;
+        box-shadow: 0 0 10px #0408fb;
+      }
+    }
+
+    .price {
+      font-weight: bold;
+      font-size: 1.5rem;
+      text-align: center;
+      margin-top: 10px;
+      text-shadow: 0 0 5px #7476ff;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 12px;
+      background-color: #7476ff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #fff;
+      font-size: 1rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+
+      &:hover {
+        background-color: #0408fb;
+        transform: translateY(-4px);
+        box-shadow: 0 0 10px #0408fb, 0 0 20px #0408fb;
+      }
+    }
+  }
+}
+
+// Responsive téléphone
+@media (max-width: 600px) {
+  .customize-neon {
+    width: 90%;
+    padding: 15px;
+
+    h2 {
+      font-size: 1.6rem;
+    }
+
+    .customize-preview .preview-text {
+      font-size: 1.5rem;
+    }
+
+    .customize-form button {
+      width: 100%;
+    }
+  }
+}
+
+--------------------
+
+Fichier: src/components/CustomizeNeonComponent/index.jsx
+Code:
+import CustomizeNeonComponent from './CustomizeNeonComponent';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default CustomizeNeonComponent;
+
+--------------------
+
+Dossier: src/components/Forms
+
+Dossier: src/components/Forms/ContactIdeaForm
+
+Fichier: src/components/Forms/ContactIdeaForm/ContactIdeaForm.jsx
+Code:
+import React, { useState } from 'react';
+import './ContactIdea.scss';
+
+function ContactIdeaPage() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [idea, setIdea] = useState('');
+  const [file, setFile] = useState(null);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    alert(`Projet envoyé : ${name}, ${email}, ${idea}, fichier : ${file?.name || 'Aucun'}`);
+    // TODO: appel API réel pour stocker / mailer
+  }
+
+  return (
+    <div className="contact-idea-page">
+      <h2>✨ Envoyez-nous votre idée/projet ✨</h2>
+      <form onSubmit={handleSubmit} className="contact-form">
+        <label>Nom</label>
+        <input 
+          value={name} 
+          onChange={e => setName(e.target.value)} 
+          required 
+          placeholder="Votre nom"
+        />
+
+        <label>Email</label>
+        <input 
+          type="email" 
+          value={email} 
+          onChange={e => setEmail(e.target.value)} 
+          required 
+          placeholder="votre.email@example.com"
+        />
+
+        <label>Description du projet</label>
+        <textarea 
+          value={idea} 
+          onChange={e => setIdea(e.target.value)} 
+          rows={4}
+          required
+          placeholder="Décrivez votre idée..."
+        />
+
+        <label>Logo/Photo (optionnel)</label>
+        <input type="file" onChange={e => setFile(e.target.files[0])} />
+
+        <button type="submit" className="neon-button">Envoyer 🚀</button>
+      </form>
+    </div>
+  );
+}
+
+export default ContactIdeaPage;
+
+--------------------
+
+Fichier: src/components/Forms/ContactIdeaForm/_contact.scss
+Code:
+.contact-idea-page {
+  max-width: 700px;
+  margin: 60px auto;
+  padding: 30px;
+  font-family: 'Mali', sans-serif;
+  color: #fff;
+  background-color: rgba(0,0,0,0.9);
+  border-radius: 12px;
+  box-shadow:
+    0 0 10px #7476ff,
+    0 0 20px #0408fb;
+
+  h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    text-shadow:
+      0 0 5px #7476ff,
+      0 0 10px #0408fb;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    label {
+      font-weight: bold;
+      font-size: 1rem;
+      text-shadow: 0 0 6px #7476ff;
+    }
+
+    input,
+    textarea {
+      background: #1a1a1a;
+      border: 2px solid #7476ff;
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 1rem;
+      color: #fff;
+      transition: border 0.3s ease, box-shadow 0.3s ease;
+
+      &:focus {
+        border-color: #0408fb;
+        box-shadow:
+          0 0 6px #7476ff,
+          0 0 12px #0408fb;
+        outline: none;
+      }
+    }
+
+    input[type="file"] {
+      border: none;
+      padding: 0;
+      background: transparent;
+    }
+
+    .neon-button {
+      align-self: center;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      color: #fff;
+      background-color: transparent;
+      border: 2px solid #7476ff;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow:
+        0 0 6px #7476ff,
+        0 0 12px #0408fb;
+
+      &:hover {
+        background-color: #7476ff;
+        box-shadow:
+          0 0 12px #7476ff,
+          0 0 24px #0408fb;
+        transform: scale(1.05);
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-idea-page {
+    max-width: 90%;
+    padding: 20px;
+  }
+
+  .neon-button {
+    width: 100%;
+  }
+}
+
+--------------------
+
+Dossier: src/components/Forms/ContactIdeaForm/a
+
+Fichier: src/components/Forms/ContactIdeaForm/index.jsx
+Code:
+import ContactIdeaForm from './ContactIdeaForm';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default ContactIdeaForm;
+
+--------------------
+
+Dossier: src/components/Forms/ContactIdeaForm/suppr
+
+Dossier: src/components/Forms/Newsletter
+
+Fichier: src/components/Forms/Newsletter/Newsletter.jsx
+Code:
+import React, { useState } from 'react';
+import './_newsletter.scss';
+
+function Newsletter() {
+  const [email, setEmail] = useState('');
+
+  const handleSubscribe = () => {
+    alert(`Inscription réussie avec l'email : ${email}`);
+    setEmail('');
+  };
+
+  return (
+    <section className="newsletter-section">
+      <h2>Restez connecté !</h2>
+      <p>Soyez les premiers informés de nos nouveautés et offres exclusives.</p>
+      <div className="newsletter-form">
+        <input
+          type="email"
+          placeholder="Votre email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <button onClick={handleSubscribe}>S'inscrire →</button>
+      </div>
+    </section>
+  );
+}
+
+export default Newsletter;
+
+--------------------
+
+Fichier: src/components/Forms/Newsletter/_newsletter.scss
+Code:
+@import '../../../scss/_variables';
+
+.newsletter-section {
+  text-align: center;
+  background: #000;
+  color: #fff;
+  padding: 40px 20px;
+  font-family: 'Mali', sans-serif;
+  position: relative;
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px #7476ff;
+  }
+
+  p {
+    font-size: 1rem;
+    margin-bottom: 20px;
+    text-shadow: 0 0 6px #7476ff;
+  }
+
+  .newsletter-form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+
+    input {
+      padding: 10px;
+      width: 250px;
+      border: none;
+      border-radius: $border-radius;
+      font-size: 1rem;
+      outline: none;
+
+      &:focus {
+        box-shadow: 0 0 8px #7476ff;
+      }
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #7476ff;
+      color: #fff;
+      font-size: 1rem;
+      border: none;
+      border-radius: $border-radius;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow:
+        0 0 8px #7476ff,
+        0 0 16px #0408fb;
+
+      &:hover {
+        transform: scale(1.05);
+        box-shadow:
+          0 0 12px #7476ff,
+          0 0 24px #0408fb;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .newsletter-form {
+      flex-direction: column;
+      align-items: center;
+
+      input, button {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      button {
+        margin-top: 10px;
+      }
+    }
+  }
+}
+
+--------------------
+
+Fichier: src/components/Forms/Newsletter/index.jsx
+Code:
+import Newsletter from './Newsletter';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default Newsletter;
+
+--------------------
+
+Dossier: src/components/HeaderFooter
+
+Dossier: src/components/HeaderFooter/Footer
+
+Fichier: src/components/HeaderFooter/Footer/Footer.jsx
+Code:
+// src/components/Footer.jsx
+import React from 'react';
+import './_footer.scss'; 
+
+function Footer() {
+  return (
+    <footer className="footer">
+      <p>© 2025 - Tous droits réservés | <a href="/mentions-legales">Mentions légales</a></p>
+    </footer>
+  );
+}
+
+export default Footer;
+
+--------------------
+
+Fichier: src/components/HeaderFooter/Footer/_footer.scss
+Code:
+.footer {
+  background: black;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  font-family: 'Mali', sans-serif;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px; // Épaisseur optimisée pour effet néon
+    background-color: #7476ff;
+    box-shadow:
+      0 0 6px 1px #7476ff,
+      0 0 12px 3px #7476ff,
+      0 0 18px 4px #0408fb;
+    animation: neon-glow 2s infinite alternate;
+  }
+
+  @keyframes neon-glow {
+    from { opacity: 0.7; }
+    to { opacity: 1; }
+  }
+
+  p {
+    font-size: 16px;
+    letter-spacing: 1px;
+    margin: 0;
+  }
+
+  a {
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: #FFD700;
+      text-shadow:
+        0 0 5px #FFD700,
+        0 0 10px #FFC700,
+        0 0 15px #FFB700;
+    }
+  }
+}
+
+--------------------
+
+Fichier: src/components/HeaderFooter/Footer/index.jsx
+Code:
+import Footer from './Footer';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default Footer;
+
+--------------------
+
+Dossier: src/components/HeaderFooter/Header
+
+Fichier: src/components/HeaderFooter/Header/Header.jsx
+Code:
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './_header.scss'; // au lieu de '/home/ubuntu/site1/src/scss/App.scss'
+
+function Header() {
+  return (
+    <header className="header">
+      <div className="logo">
+        <Link to="/">STUDIO NEON</Link>
+      </div>
+      <nav className="nav-links">
+        <Link to="/shop">Shop</Link>
+        <Link to="/customize">Personnaliser</Link>
+        <Link to="/contact-idea">Projet</Link>
+        <Link to="/cart">Panier</Link>
+      </nav>
+    </header>
+  );
+}
+
+export default Header;
+
+--------------------
+
+Fichier: src/components/HeaderFooter/Header/_header.scss
+Code:
+// src/scss/_header.scss
+
+.header {
+  background: black;
+  color: #fff;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  font-family: 'Mali', sans-serif; // ✅ Application de la police Mali à tout le header
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3px; // Épaisseur optimisée pour effet néon
+    background-color: #7476ff; // Couleur de base néon
+    box-shadow:
+      0 0 6px 1px #7476ff,   // Spread légèrement augmenté (3px)
+      0 0 12px 3px #7476ff,  // Spread étendu (6px) pour diffusion large
+      0 0 18px 4px #0408fb;  // Spread très large pour un halo intense
+    animation: neon-glow 2s infinite alternate;
+  }
+
+  @keyframes neon-glow {
+    from { opacity: 0.7; }
+    to { opacity: 1; }
+  }
+
+  a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: #FFD700;
+      text-shadow: 0 0 8px #FFD700;
+    }
+  }
+
+  .logo {
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 4px;
+    color: #fff;
+    text-transform: uppercase;
+    position: relative;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    a {
+      color: inherit;
+      text-decoration: none;
+      position: relative;
+      z-index: 1;
+  
+      text-shadow:
+        0 0 5px #00f0ff,
+        0 0 10px #00c0ff,
+        0 0 20px #00aaff,
+        0 0 30px #0080ff,
+        0 0 40px #005eff,
+        0 0 50px #003cff,
+        0 0 75px #002aff;
+  
+      &:hover {
+        text-shadow:
+          0 0 8px #00f0ff,
+          0 0 16px #00c0ff,
+          0 0 32px #00aaff,
+          0 0 48px #0080ff,
+          0 0 64px #005eff,
+          0 0 80px #003cff,
+          0 0 100px #002aff;
+        transform: scale(1.05);
+      }
+    }
+  
+    &::before {
+      content: "";
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      border-radius: 6px;
+      background: rgba(0, 123, 255, 0.2);
+      box-shadow:
+        0 0 10px 2px #00f0ff,
+        0 0 20px 4px #00aaff,
+        inset 0 0 10px 1px #007bff;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+  
+    &:hover::before {
+      opacity: 1;
+    }
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 50px;
+
+    a {
+      font-size: 19px;
+      border-radius: 22px;
+      padding: 6px 14px;
+
+      &:hover {
+        background: rgba(116, 118, 255, 0.2);
+        box-shadow:
+          0 0 10px #FFD700,
+          inset 0 0 4px #FFD700;
+      }
+    }
+  }
+}
+
+--------------------
+
+Fichier: src/components/HeaderFooter/Header/index.jsx
+Code:
+import Header from './Header';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default Header;
+
+--------------------
+
+Dossier: src/components/ImageWithText
+
+Fichier: src/components/ImageWithText/ImageWithText.jsx
+Code:
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import './_image-text.scss';
+
+function ImageWithText() {
+  const navigate = useNavigate();
+
+  return (
+    <section className="image-with-text">
+      <img src="/images/tshirt.png" alt="Produit personnalisé" className="image-with-text__img" />
+      <div className="content">
+        <h3>Vous avez une idée en tête ?</h3>
+        <button className="neon-button" onClick={() => navigate('/contact-idea')}>
+          Envoyez-nous votre projet
+        </button>
+      </div>
+    </section>
+  );
+}
+
+export default ImageWithText;
+
+--------------------
+
+Fichier: src/components/ImageWithText/_image-text.scss
+Code:
+.image-with-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent; // ✅ Suppression du fond blanc
+  margin: 40px auto;
+  padding: 20px;
+  max-width: 1000px;
+  gap: 20px;
+  flex-wrap: wrap;
+
+  &__img {
+    width: 100%;
+    max-width: 350px;
+    border-radius: 12px;
+    box-shadow: 
+      0 0 10px rgba(0, 0, 255, 0.4),
+      0 0 20px rgba(0, 0, 255, 0.2);
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  .content {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow:
+      0 0 8px rgba(0, 123, 255, 0.6),
+      inset 0 0 8px rgba(0, 123, 255, 0.4);
+
+    h3 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      text-shadow: 0 0 6px rgba(0, 123, 255, 0.7);
+    }
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    .neon-button {
+      background: transparent;
+      border: 2px solid #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #007bff, inset 0 0 10px #007bff;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: #007bff;
+        box-shadow: 0 0 20px #00aaff, inset 0 0 10px #005eff;
+      }
+    }
+  }
+}
+
+// ✅ Responsive Mobile
+@media (max-width: 768px) {
+  .image-with-text {
+    flex-direction: column;
+    padding: 10px;
+
+    &__img {
+      margin-bottom: 20px;
+    }
+
+    .content {
+      width: 100%;
+      text-align: center;
+    }
+  }
+}
+
+--------------------
+
+Fichier: src/components/ImageWithText/index.jsx
+Code:
+import ImageWithText from './ImageWithText';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default ImageWithText;
+
+--------------------
+
+Dossier: src/components/Productpage
+
+Fichier: src/components/Productpage/index.jsx
+Code:
+// src/pages/Cart/index.jsx
+import Productpage from './Productpage';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default Productpage;
+
+--------------------
+
+Dossier: src/components/ThreeRows
+
+Fichier: src/components/ThreeRows/ThreeRows.jsx
+Code:
+// src/components/ThreeRows/ThreeRows.jsx
+import React from 'react';
+import './ThreeRows.scss';
+
+const ThreeRows = () => {
+  return (
+    <section className="three-rows">
+      <div className="neon-card neon-gold">
+        <h3>Fabrication Artisanale</h3>
+        <p>Chaque néon est unique, conçu avec précision.</p>
+      </div>
+      <div className="neon-card neon-pink">
+        <h3>Livraison Rapide</h3>
+        <p>Recevez rapidement votre néon où que vous soyez.</p>
+      </div>
+      <div className="neon-card neon-purple">
+        <h3>Service Client Réactif</h3>
+        <p>Nous sommes disponibles 7j/7 pour vous accompagner.</p>
+      </div>
+    </section>
+  );
+};
+
+export default ThreeRows;
+
+--------------------
+
+Fichier: src/components/ThreeRows/ThreeRows.scss
+Code:
+@import '../../scss/_variables';
+
+.three-rows {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 3rem 2rem;
+  background-color: #000;
+  font-family: 'Mali', sans-serif;
+
+  .neon-card {
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    flex: 1;
+
+    h3 {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    p {
+      color: #ccc;
+      font-size: 1rem;
+    }
+
+    &:hover {
+      transform: translateY(-8px);
+    }
+  }
+
+  .neon-gold {
+    box-shadow:
+      0 0 5px #ffd700,
+      0 0 15px #ffd700,
+      0 0 25px #ffc400,
+      inset 0 0 5px #ffd700;
+  
+    &:hover {
+      box-shadow:
+        0 0 8px #ffd700,
+        0 0 20px #ff9900,
+        0 0 25px #ff9900;
+    }
+  
+    h3 {
+      text-shadow: 0 0 8px #ffd700;
+    }
+  }
+
+  .neon-pink {
+    box-shadow:
+      0 0 5px #ff1493,
+      0 0 15px #ff1493,
+      0 0 25px #ff007f,
+      inset 0 0 5px #ff1493;
+  
+    &:hover {
+      box-shadow:
+        0 0 8px #ff1493,
+        0 0 20px #ff007f;
+    }
+  
+    h3 {
+      text-shadow: 0 0 8px #ff1493;
+    }
+  }
+
+  .neon-purple {
+    box-shadow:
+      0 0 5px #b300ff,
+      0 0 15px #b300ff,
+      0 0 20px #b300ff;
+
+    &:hover {
+      box-shadow:
+        0 0 8px #b300ff,
+        0 0 20px #b300ff;
+    }
+
+    h3 {
+      text-shadow: 0 0 8px #b300ff;
+    }
+  }
+}
+
+// Responsive (Optimisation pour téléphone)
+@media (max-width: 768px) {
+  .three-rows {
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    gap: 1rem;
+
+    .neon-card {
+      width: 100%;
+      padding: 15px;
+
+      h3 {
+        font-size: 1.3rem;
+      }
+
+      p {
+        font-size: 0.95rem;
+      }
+    }
+  }
+}
+
+--------------------
+
+Fichier: src/components/ThreeRows/index.jsx
+Code:
+import ThreeRows from './ThreeRows';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default ThreeRows;
+
+--------------------
+
+Dossier: src/data
+
+Fichier: src/data/colors.json
+Code:
+[
+    { "name": "Rouge", "hex": "#FF0000" },
+    { "name": "Bleu", "hex": "#0000FF" },
+    { "name": "Vert", "hex": "#00FF00" }
+  ]
+  
+--------------------
+
+Fichier: src/data/polices.json
+Code:
+[
+    { "name": "Helvetica", "extraCost": 0 },
+    { "name": "Arial", "extraCost": 1 }
+  ]
+  
+--------------------
+
+Fichier: src/data/pricingRules.json
+Code:
+{
+    "sizes": {
+      "50cm": 50,
+      "75cm": 75,
+      "100cm": 100
+    },
+    "panelExtra": 1.11 
+  }
+  
+--------------------
+
+Fichier: src/data/shopProducts.json
+Code:
+[
+    {
+      "id": 1,
+      "name": "Néon Hello",
+      "price": 50,
+      "image": "/images/neonHello.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Néon Open",
+      "price": 60,
+      "image": "/images/neonOpen.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Néon Love",
+      "price": 70,
+      "image": "/images/neonLove.jpg"
+    }
+  ]
+  
+--------------------
+
+Fichier: src/index.css
+Code:
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+--------------------
+
+Fichier: src/index.jsx
+Code:
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import './scss/App.scss';
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+
+--------------------
+
+Fichier: src/logo.svg
+Code:
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 841.9 595.3"><g fill="#61DAFB"><path d="M666.3 296.5c0-32.5-40.7-63.3-103.1-82.4 14.4-63.6 8-114.2-20.2-130.4-6.5-3.8-14.1-5.6-22.4-5.6v22.3c4.6 0 8.3.9 11.4 2.6 13.6 7.8 19.5 37.5 14.9 75.7-1.1 9.4-2.9 19.3-5.1 29.4-19.6-4.8-41-8.5-63.5-10.9-13.5-18.5-27.5-35.3-41.6-50 32.6-30.3 63.2-46.9 84-46.9V78c-27.5 0-63.5 19.6-99.9 53.6-36.4-33.8-72.4-53.2-99.9-53.2v22.3c20.7 0 51.4 16.5 84 46.6-14 14.7-28 31.4-41.3 49.9-22.6 2.4-44 6.1-63.6 11-2.3-10-4-19.7-5.2-29-4.7-38.2 1.1-67.9 14.6-75.8 3-1.8 6.9-2.6 11.5-2.6V78.5c-8.4 0-16 1.8-22.6 5.6-28.1 16.2-34.4 66.7-19.9 130.1-62.2 19.2-102.7 49.9-102.7 82.3 0 32.5 40.7 63.3 103.1 82.4-14.4 63.6-8 114.2 20.2 130.4 6.5 3.8 14.1 5.6 22.5 5.6 27.5 0 63.5-19.6 99.9-53.6 36.4 33.8 72.4 53.2 99.9 53.2 8.4 0 16-1.8 22.6-5.6 28.1-16.2 34.4-66.7 19.9-130.1 62-19.1 102.5-49.9 102.5-82.3zm-130.2-66.7c-3.7 12.9-8.3 26.2-13.5 39.5-4.1-8-8.4-16-13.1-24-4.6-8-9.5-15.8-14.4-23.4 14.2 2.1 27.9 4.7 41 7.9zm-45.8 106.5c-7.8 13.5-15.8 26.3-24.1 38.2-14.9 1.3-30 2-45.2 2-15.1 0-30.2-.7-45-1.9-8.3-11.9-16.4-24.6-24.2-38-7.6-13.1-14.5-26.4-20.8-39.8 6.2-13.4 13.2-26.8 20.7-39.9 7.8-13.5 15.8-26.3 24.1-38.2 14.9-1.3 30-2 45.2-2 15.1 0 30.2.7 45 1.9 8.3 11.9 16.4 24.6 24.2 38 7.6 13.1 14.5 26.4 20.8 39.8-6.3 13.4-13.2 26.8-20.7 39.9zm32.3-13c5.4 13.4 10 26.8 13.8 39.8-13.1 3.2-26.9 5.9-41.2 8 4.9-7.7 9.8-15.6 14.4-23.7 4.6-8 8.9-16.1 13-24.1zM421.2 430c-9.3-9.6-18.6-20.3-27.8-32 9 .4 18.2.7 27.5.7 9.4 0 18.7-.2 27.8-.7-9 11.7-18.3 22.4-27.5 32zm-74.4-58.9c-14.2-2.1-27.9-4.7-41-7.9 3.7-12.9 8.3-26.2 13.5-39.5 4.1 8 8.4 16 13.1 24 4.7 8 9.5 15.8 14.4 23.4zM420.7 163c9.3 9.6 18.6 20.3 27.8 32-9-.4-18.2-.7-27.5-.7-9.4 0-18.7.2-27.8.7 9-11.7 18.3-22.4 27.5-32zm-74 58.9c-4.9 7.7-9.8 15.6-14.4 23.7-4.6 8-8.9 16-13 24-5.4-13.4-10-26.8-13.8-39.8 13.1-3.1 26.9-5.8 41.2-7.9zm-90.5 125.2c-35.4-15.1-58.3-34.9-58.3-50.6 0-15.7 22.9-35.6 58.3-50.6 8.6-3.7 18-7 27.7-10.1 5.7 19.6 13.2 40 22.5 60.9-9.2 20.8-16.6 41.1-22.2 60.6-9.9-3.1-19.3-6.5-28-10.2zM310 490c-13.6-7.8-19.5-37.5-14.9-75.7 1.1-9.4 2.9-19.3 5.1-29.4 19.6 4.8 41 8.5 63.5 10.9 13.5 18.5 27.5 35.3 41.6 50-32.6 30.3-63.2 46.9-84 46.9-4.5-.1-8.3-1-11.3-2.7zm237.2-76.2c4.7 38.2-1.1 67.9-14.6 75.8-3 1.8-6.9 2.6-11.5 2.6-20.7 0-51.4-16.5-84-46.6 14-14.7 28-31.4 41.3-49.9 22.6-2.4 44-6.1 63.6-11 2.3 10.1 4.1 19.8 5.2 29.1zm38.5-66.7c-8.6 3.7-18 7-27.7 10.1-5.7-19.6-13.2-40-22.5-60.9 9.2-20.8 16.6-41.1 22.2-60.6 9.9 3.1 19.3 6.5 28.1 10.2 35.4 15.1 58.3 34.9 58.3 50.6-.1 15.7-23 35.6-58.4 50.6zM320.8 78.4z"/><circle cx="420.9" cy="296.5" r="45.7"/><path d="M520.5 78.1z"/></g></svg>
+--------------------
+
+Dossier: src/pages
+
+Dossier: src/pages/Admin
+
+Dossier: src/pages/Admin/AdminDashboard
+
+Fichier: src/pages/Admin/AdminDashboard/AdminDashboard.jsx
+Code:
+// site1/src/pages/Admin/AdminDashboard/AdminDashboard.jsx
+import React, { useEffect, useState } from 'react';
+import { 
+  getShopProducts, saveShopProducts,
+  getPolices, savePolices,
+  getColors, saveColors
+} from '../../../services/dataService';
+
+function AdminDashboard() {
+  const [shopItems, setShopItems] = useState([]);
+  const [polices, setPolicesState] = useState([]);
+  const [colors, setColorsState] = useState([]);
+
+  // Champs pour ajouter un nouveau produit
+  const [newProdName, setNewProdName] = useState('');
+  const [newProdPrice, setNewProdPrice] = useState('');
+  const [newProdImage, setNewProdImage] = useState('');
+
+  // Champs pour ajouter une police
+  const [newFontName, setNewFontName] = useState('');
+  const [newFontExtra, setNewFontExtra] = useState('');
+
+  // Champs pour ajouter une couleur
+  const [newColorName, setNewColorName] = useState('');
+  const [newColorHex, setNewColorHex] = useState('');
+
+  useEffect(() => {
+    const sProds = getShopProducts();
+    setShopItems(sProds);
+    const pols = getPolices();
+    setPolicesState(pols);
+    const cols = getColors();
+    setColorsState(cols);
+  }, []);
+
+  // Gérer le shop
+  function addProduct() {
+    if (!newProdName || !newProdPrice || !newProdImage) return;
+    const newId = shopItems.length > 0 ? shopItems[shopItems.length-1].id + 1 : 1;
+    const newItem = {
+      id: newId,
+      name: newProdName,
+      price: newProdPrice,
+      image: newProdImage
+    };
+    const updated = [...shopItems, newItem];
+    setShopItems(updated);
+    saveShopProducts(updated);
+
+    setNewProdName(''); setNewProdPrice(''); setNewProdImage('');
+  }
+  function removeProduct(id) {
+    const updated = shopItems.filter((item) => item.id !== id);
+    setShopItems(updated);
+    saveShopProducts(updated);
+  }
+
+  // Gérer polices
+  function addFont() {
+    if (!newFontName) return;
+    const extra = parseFloat(newFontExtra) || 0;
+    const updated = [...polices, { name: newFontName, extraCost: extra }];
+    setPolicesState(updated);
+    savePolices(updated);
+
+    setNewFontName(''); setNewFontExtra('');
+  }
+  function removeFont(fontName) {
+    const updated = polices.filter((f) => f.name !== fontName);
+    setPolicesState(updated);
+    savePolices(updated);
+  }
+
+  // Gérer couleurs
+  function addColor() {
+    if (!newColorName || !newColorHex) return;
+    const updated = [...colors, { name: newColorName, hex: newColorHex }];
+    setColorsState(updated);
+    saveColors(updated);
+
+    setNewColorName(''); setNewColorHex('');
+  }
+  function removeColor(colorName) {
+    const updated = colors.filter((c) => c.name !== colorName);
+    setColorsState(updated);
+    saveColors(updated);
+  }
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <h2>Admin Dashboard</h2>
+
+      <section style={{ marginBottom: '20px' }}>
+        <h3>Produits du Shop</h3>
+        <div>
+          <input 
+            type="text" placeholder="Nom" 
+            value={newProdName} onChange={(e)=>setNewProdName(e.target.value)}
+          />
+          <input 
+            type="text" placeholder="Prix ex: 129€"
+            value={newProdPrice} onChange={(e)=>setNewProdPrice(e.target.value)}
+          />
+          <input 
+            type="text" placeholder="URL de l'image"
+            value={newProdImage} onChange={(e)=>setNewProdImage(e.target.value)}
+          />
+          <button onClick={addProduct}>Ajouter</button>
+        </div>
+        <ul>
+          {shopItems.map(prod => (
+            <li key={prod.id}>
+              {prod.name} - {prod.price} 
+              <img src={prod.image} alt={prod.name} style={{ width: '50px' }}/>
+              <button onClick={()=>removeProduct(prod.id)}>Supprimer</button>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section style={{ marginBottom: '20px' }}>
+        <h3>Polices</h3>
+        <div>
+          <input 
+            type="text" placeholder="Nom police"
+            value={newFontName} onChange={(e)=>setNewFontName(e.target.value)}
+          />
+          <input 
+            type="number" placeholder="Surcoût" step="0.1"
+            value={newFontExtra} onChange={(e)=>setNewFontExtra(e.target.value)}
+          />
+          <button onClick={addFont}>Ajouter</button>
+        </div>
+        <ul>
+          {polices.map((f, index) => (
+            <li key={index}>
+              {f.name} (surcoût: {f.extraCost})
+              <button onClick={()=>removeFont(f.name)}>Supprimer</button>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section style={{ marginBottom: '20px' }}>
+        <h3>Couleurs</h3>
+        <div>
+          <input 
+            type="text" placeholder="Nom Couleur"
+            value={newColorName} onChange={(e)=>setNewColorName(e.target.value)}
+          />
+          <input 
+            type="text" placeholder="Hex ex: #FF0000"
+            value={newColorHex} onChange={(e)=>setNewColorHex(e.target.value)}
+          />
+          <button onClick={addColor}>Ajouter</button>
+        </div>
+        <ul>
+          {colors.map((c, index) => (
+            <li key={index}>
+              {c.name} - {c.hex}
+              <button onClick={()=>removeColor(c.name)}>Supprimer</button>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* On pourrait faire pareil pour pricingRules, etc. */}
+    </div>
+  );
+}
+
+export default AdminDashboard;
+
+--------------------
+
+Fichier: src/pages/Admin/AdminDashboard/_admin-dashboard.scss
+Code:
+/* site1/src/pages/Admin/AdminDashboard/_admin-dashboard.scss*/
+
+.admin-dashboard {
+    padding: 20px;
+    max-width: 900px;
+    margin: 40px auto;
+    font-family: Arial, sans-serif;
+  
+    h2 {
+      color: #0B1741;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+  
+    .logout-btn {
+      background: #e53935;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      float: right;
+      cursor: pointer;
+      border-radius: 5px;
+  
+      &:hover {
+        background: #b71c1c;
+      }
+    }
+  
+    .admin-section {
+      margin-top: 60px;
+  
+      h3 {
+        margin-bottom: 15px;
+      }
+  
+      .admin-form {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+  
+        input {
+          flex: 1;
+          padding: 8px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+        }
+  
+        button {
+          background: #0B1741;
+          color: #fff;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 4px;
+          cursor: pointer;
+  
+          &:hover {
+            background: #162A64;
+          }
+        }
+      }
+  
+      .product-list, .font-list, .color-list {
+        list-style: none;
+        padding: 0;
+  
+        li {
+          margin-bottom: 10px;
+          img {
+            margin-left: 10px;
+            vertical-align: middle;
+          }
+          button {
+            margin-left: 10px;
+            background: #e53935;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            &:hover {
+              background: #b71c1c;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+--------------------
+
+Fichier: src/pages/Admin/AdminDashboard/index.jsx
+Code:
+// site1/src/pages/Admin/AdminDashboard/index.jsx
+import AdminDashboard from './AdminDashboard';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default AdminDashboard;
+
+
+--------------------
+
+Dossier: src/pages/Admin/AdminLogin
+
+Fichier: src/pages/Admin/AdminLogin/AdminLogin.jsx
+Code:
+// src/pages/AdminLogin.jsx
+import React, { useState } from 'react';
+import { useAuth } from '../../../AuthContext';
+import { useNavigate } from 'react-router-dom';
+
+function AdminLogin() {
+  const [password, setPassword] = useState("");
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (login(password)) {
+      navigate('/admin');
+    } else {
+      alert("Mot de passe incorrect");
+    }
+  }
+
+  return (
+    <div style={{ maxWidth: '400px', margin: '50px auto', textAlign: 'center' }}>
+      <h2>Admin Login</h2>
+      <form onSubmit={handleSubmit}>
+        <input 
+          type="password"
+          placeholder="Mot de passe"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
+        <button type="submit">Se connecter</button>
+      </form>
+    </div>
+  );
+}
+
+export default AdminLogin;
+
+--------------------
+
+Fichier: src/pages/Admin/AdminLogin/_admin-login.scss
+Code:
+/* src/scss/_admin-login.scss */
+
+.admin-login {
+    max-width: 400px;
+    margin: 50px auto;
+    text-align: center;
+    font-family: Arial, sans-serif;
+  
+    h2 {
+      color: #0B1741;
+      margin-bottom: 20px;
+    }
+  
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+  
+      input {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+  
+      button {
+        background: #0B1741;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 10px;
+        cursor: pointer;
+        &:hover {
+          background: #162A64;
+        }
+      }
+    }
+  }
+  
+--------------------
+
+Fichier: src/pages/Admin/AdminLogin/index.jsx
+Code:
+// site1/src/pages/Admin/AdminLogin/index.jsx
+import AdminLogin from './AdminLogin';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default AdminLogin;
+
+--------------------
+
+Dossier: src/pages/Cart
+
+Fichier: src/pages/Cart/CartPage.jsx
+Code:
+// src/pages/HomePage.jsx
+import React from 'react';
+import CartPageComponent from '../../components/CarteComponent/CartPageComponent';
+
+
+function CartPage() {
+  return (
+    <div>
+
+      {/* ✅ Bannière Hero */}
+      <CartPageComponent />
+    </div>
+  );
+}
+
+export default CartPage;
+--------------------
+
+Fichier: src/pages/Cart/index.jsx
+Code:
+// src/pages/Cart/index.jsx
+import Cart from './CartPage';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default Cart;
+
+--------------------
+
+Dossier: src/pages/Checkout
+
+Fichier: src/pages/Checkout/CheckoutPage.jsx
+Code:
+// src/pages/CheckoutPage.jsx
+import React from 'react';
+
+function CheckoutPage() {
+  function handlePay() {
+    alert('Paiement Stripe en cours...');
+    // TODO: appel backend -> stripe create checkout session -> redirect
+  }
+
+  return (
+    <div>
+      <h2>Paiement</h2>
+      <p>Montant total: ... €</p>
+      <button onClick={handlePay}>Payer avec Stripe</button>
+    </div>
+  );
+}
+
+export default CheckoutPage;
+
+--------------------
+
+Fichier: src/pages/Checkout/_checkout.scss
+Code:
+/* src/pages/Checkout/_checkout.scss */
+
+.checkout-page {
+    max-width: 800px;
+    margin: 40px auto;
+    font-family: Arial, sans-serif;
+  
+    h2 {
+      text-align: center;
+      color: #0B1741;
+      margin-bottom: 20px;
+    }
+  
+    .checkout-form {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 20px;
+  
+      label {
+        display: block;
+        margin: 10px 0 5px;
+      }
+  
+      input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+  
+      button {
+        margin-top: 15px;
+        background: #0B1741;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 20px;
+        cursor: pointer;
+  
+        &:hover {
+          background: #162A64;
+        }
+      }
+    }
+  }
+  
+--------------------
+
+Fichier: src/pages/Checkout/index.jsx
+Code:
+//src/pages/Checkout/index.jsx
+import Checkout from './CheckoutPage';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default Checkout;
+
+--------------------
+
+Dossier: src/pages/ContactIdea
+
+Fichier: src/pages/ContactIdea/ContactIdeaPage.jsx
+Code:
+// src/pages/HomePage.jsx
+import React from 'react';
+import ContactIdeaComponent from '../../components/ContactIdeaComponent';
+
+
+function ContactIdeaPage() {
+  return (
+    <div>
+
+      {/* ✅ Bannière Hero */}
+      <ContactIdeaComponent />
+    </div>
+  );
+}
+
+export default ContactIdeaPage;
+--------------------
+
+Fichier: src/pages/ContactIdea/index.jsx
+Code:
+//src/pages/Checkout/index.jsx
+import ContactIdea from './ContactIdeaPage';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default ContactIdea;
+
+--------------------
+
+Dossier: src/pages/Customize
+
+Fichier: src/pages/Customize/CustomizeNeonPage.jsx
+Code:
+// src/pages/HomePage.jsx
+import React from 'react';
+import CustomizeNeonComponent from '../../components/CustomizeNeonComponent';
+
+
+function CustomizeNeonPage() {
+  return (
+    <div>
+
+      {/* ✅ Bannière Hero */}
+      <CustomizeNeonComponent />
+    </div>
+  );
+}
+
+export default CustomizeNeonPage;
+
+--------------------
+
+Fichier: src/pages/Customize/index.jsx
+Code:
+//src/pages/Checkout/index.jsx
+import Customize from './CustomizeNeonPage';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default Customize;
+
+--------------------
+
+Dossier: src/pages/Home
+
+Fichier: src/pages/Home/HomePage.jsx
+Code:
+// src/pages/HomePage.jsx
+import React from 'react';
+import CollapsibleRows from '../../components/Collapsible/CollapsibleRows';
+import Carousel from '../../components/Carousel/Carousel';
+import BannerHero from "../../components/BannerHero/BannerHero"; // ✅ Importation de la bannière
+import ThreeRows from '../../components/ThreeRows/ThreeRows';
+import Newsletter from '../../components/Forms/Newsletter'; 
+import ImageWithText from '../../components/ImageWithText/ImageWithText'
+
+
+
+function HomePage() {
+  return (
+    <div>
+
+      {/* ✅ Bannière Hero */}
+      <BannerHero />
+      {/* ✅ Ajout du Carrousel ICI */}
+      <Carousel />
+      {/* Multi-row ex. */}
+      <ThreeRows />
+
+      <ImageWithText />
+
+      {/* Collapsible content */}
+      <CollapsibleRows />
+
+      <Newsletter />
+    </div>
+  );
+}
+
+export default HomePage;
+
+--------------------
+
+Fichier: src/pages/Home/index.jsx
+Code:
+//src/pages/Checkout/index.jsx
+import Home from './HomePage';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default Home;
+
+--------------------
+
+Dossier: src/pages/Product
+
+Fichier: src/pages/Product/ProductPage.jsx
+Code:
+// src/pages/Product/ProductPage.jsx
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import { getShopProducts } from '../../services/dataService';
+import './ProductPage.scss';
+
+function ProductPage() {
+  const { id } = useParams();
+  const products = getShopProducts();
+  const product = products.find((p) => p.id === Number(id));
+
+  if (!product) {
+    return <div className="product-page">Produit introuvable</div>;
+  }
+
+  return (
+    <div className="product-page">
+      <div className="product-card">
+        <div className="product-image-wrapper">
+          <img src={product.image} alt={product.name} className="product-image" />
+        </div>
+        <div className="product-details">
+          <h2 className="product-title">{product.name}</h2>
+          <p className="product-price">{product.price} €</p>
+          <button className="neon-button">Ajouter au panier</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default ProductPage;
+
+--------------------
+
+Fichier: src/pages/Product/ProductPage.scss
+Code:
+// src/pages/Product/ProductPage.scss
+
+.product-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    background-color: #000; // ✅ Fond cohérent noir global
+    color: #fff;
+    font-family: 'Mali', sans-serif;
+  
+    .product-card {
+      display: flex;
+      flex-direction: row;
+      background: rgba(0, 0, 0, 0.9);
+      border-radius: 15px;
+      box-shadow:
+        0 0 8px #7476ff,
+        0 0 15px #0408fb;
+      padding: 30px;
+      max-width: 900px;
+      width: 100%;
+      gap: 2rem;
+  
+      .product-image-wrapper {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+  
+        .product-image {
+          width: 100%;
+          max-width: 350px;
+          border-radius: 12px;
+          box-shadow:
+            0 0 8px rgba(116, 118, 255, 0.6),
+            0 0 15px rgba(4, 8, 251, 0.8);
+        }
+      }
+  
+      .product-details {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+  
+        .product-title {
+          font-size: 2rem;
+          margin-bottom: 1rem;
+          text-shadow: 0 0 10px #7476ff;
+        }
+  
+        .product-price {
+          font-size: 1.5rem;
+          margin-bottom: 2rem;
+          color: #FFD700;
+          text-shadow: 0 0 8px #FFD700;
+        }
+  
+        .neon-button {
+          background: transparent;
+          border: 2px solid #7476ff;
+          color: #fff;
+          padding: 12px 25px;
+          border-radius: 25px;
+          cursor: pointer;
+          font-size: 1.1rem;
+          transition: all 0.3s ease;
+          box-shadow:
+            0 0 10px #7476ff,
+            inset 0 0 10px #0408fb;
+  
+          &:hover {
+            background: #7476ff;
+            box-shadow:
+              0 0 15px #7476ff,
+              inset 0 0 15px #0408fb;
+          }
+        }
+      }
+    }
+  
+    // ✅ Mobile optimisation
+    @media (max-width: 768px) {
+      .product-card {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+  
+        .product-image-wrapper {
+          margin-bottom: 1.5rem;
+        }
+  
+        .product-details {
+          align-items: center;
+          text-align: center;
+        }
+      }
+    }
+  }
+  
+--------------------
+
+Fichier: src/pages/Product/index.Jsx
+Code:
+//src/pages/Checkout/index.jsx
+import Product from './ProductPage';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default Product;
+
+--------------------
+
+Dossier: src/pages/Shop
+
+Fichier: src/pages/Shop/ShopPage.jsx
+Code:
+// src/pages/Shop/ShopPage.jsx
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getShopProducts } from '../../services/dataService';
+import './ShopPage.scss';
+
+function ShopPage() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const data = getShopProducts();
+    setProducts(data);
+  }, []);
+
+  return (
+    <div className="shop-page">
+      <h2 className="shop-title">Nos Néons Prêts à l’Emploi</h2>
+      <div className="shop-grid">
+        {products.map(product => (
+          <div className="shop-item" key={product.id}>
+            <div className="product-img-container">
+              <img src={product.image} alt={product.name} className="product-img" />
+            </div>
+            <h3 className="product-name">{product.name}</h3>
+            <p className="product-price">{product.price} €</p>
+            <Link to={`/product/${product.id}`} className="neon-button">Voir le produit</Link>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default ShopPage;
+
+--------------------
+
+Fichier: src/pages/Shop/ShopPage.scss
+Code:
+// src/pages/Shop/ShopPage.scss
+
+.shop-page {
+    padding: 2rem;
+    background-color: #000;
+    color: #fff;
+    font-family: 'Mali', sans-serif;
+  
+    .shop-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+      text-shadow: 0 0 12px #7476ff;
+    }
+  
+    .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+  
+      .shop-item {
+        background: rgba(0, 0, 0, 0.8);
+        padding: 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow:
+          0 0 6px #7476ff,
+          0 0 15px #0408fb;
+  
+        &:hover {
+          transform: translateY(-10px);
+          box-shadow:
+            0 0 12px #7476ff,
+            0 0 24px #0408fb;
+        }
+  
+        .product-img-container {
+          width: 100%;
+          overflow: hidden;
+          border-radius: 8px;
+          margin-bottom: 1rem;
+  
+          .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+  
+            &:hover {
+              transform: scale(1.1);
+            }
+          }
+        }
+  
+        .product-name {
+          font-size: 1.4rem;
+          margin: 0.5rem 0;
+          text-shadow: 0 0 6px #7476ff;
+        }
+  
+        .product-price {
+          color: #FFD700;
+          font-size: 1.2rem;
+          margin-bottom: 1rem;
+          text-shadow: 0 0 8px #FFD700;
+        }
+  
+        .neon-button {
+          display: inline-block;
+          background: transparent;
+          color: #fff;
+          text-decoration: none;
+          border: 2px solid #7476ff;
+          border-radius: 20px;
+          padding: 8px 16px;
+          transition: all 0.3s ease;
+          box-shadow:
+            0 0 8px #7476ff,
+            inset 0 0 8px #0408fb;
+  
+          &:hover {
+            background: #7476ff;
+            box-shadow:
+              0 0 12px #7476ff,
+              inset 0 0 12px #0408fb;
+            transform: scale(1.05);
+          }
+        }
+      }
+    }
+  
+    // ✅ Optimisation mobile
+    @media (max-width: 768px) {
+      .shop-grid {
+        gap: 1.5rem;
+  
+        .shop-item {
+          padding: 1rem;
+  
+          .product-img {
+            height: 180px;
+          }
+        }
+      }
+    }
+  }
+  
+--------------------
+
+Fichier: src/pages/Shop/index.jsx
+Code:
+//src/pages/Shop/index.jsx
+import Shop from './ShopPage';
+
+// traitement intermédiaire ou logique spécifique ici
+
+export default Shop;
+
+--------------------
+
+Fichier: src/reportWebVitals.js
+Code:
+const reportWebVitals = onPerfEntry => {
+  if (onPerfEntry && onPerfEntry instanceof Function) {
+    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+      getCLS(onPerfEntry);
+      getFID(onPerfEntry);
+      getFCP(onPerfEntry);
+      getLCP(onPerfEntry);
+      getTTFB(onPerfEntry);
+    });
+  }
+};
+
+export default reportWebVitals;
+
+--------------------
+
+Dossier: src/scss
+
+Fichier: src/scss/App.scss
+Code:
+/* 1) Reset / base */
+/*@import 'reset'; // ou la reset inline
+/* 2) Variables / mixins */
+@import 'variables';
+@import 'buttons';
+/* 3) Composants communs */
+@import '../components/HeaderFooter/Header/header';
+@import '../components/HeaderFooter/Footer/footer';
+@import '../components/Collapsible/collapsible';
+@import '../components/ImageWithText/_image-text';
+@import '../components/Forms/Newsletter/newsletter';
+@import '../components/CarteComponent/_cart';
+
+
+/* 4) Global overrides */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+// Ajout d'une font global
+body {
+  font-family: Mali, sans-serif;
+  background-color: #000000;
+  color: #333;
+}
+
+--------------------
+
+Fichier: src/scss/ShopPage.scss
+Code:
+/* src/scss/ShopPage.scss */
+
+.shop-page {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: Arial, sans-serif;
+  
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #0B1741;
+      font-size: 2rem;
+    }
+  
+    .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+  
+    .shop-item {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+  
+      h3 {
+        margin: 0 0 10px;
+        color: #333;
+      }
+  
+      .price {
+        margin-bottom: 10px;
+        color: #e53935;
+        font-weight: bold;
+      }
+  
+      button {
+        background-color: #0B1741;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-size: 1rem;
+  
+        &:hover {
+          background-color: #162A64;
+        }
+      }
+  
+      .detail-link {
+        display: inline-block;
+        margin-top: 10px;
+        color: #007bff;
+        text-decoration: underline;
+  
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+  
+--------------------
+
+Fichier: src/scss/_admin.scss
+Code:
+// src/scss/_admin.scss
+
+.admin-dashboard {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+  
+    .admin-section {
+      background: #f8f8f8;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+  
+      h3 {
+        margin-bottom: 15px;
+        color: #333;
+      }
+  
+      .admin-form {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+  
+        input {
+          padding: 8px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          flex: 1;
+        }
+  
+        button {
+          background: #0B1741;
+          color: #fff;
+          border: none;
+          padding: 10px 15px;
+          border-radius: 4px;
+          cursor: pointer;
+  
+          &:hover {
+            background: #162A64;
+          }
+        }
+      }
+  
+      .admin-list {
+        list-style: none;
+        padding: 0;
+  
+        li {
+          background: #fff;
+          margin-bottom: 5px;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+  
+          button {
+            background: #e53935;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+  
+            &:hover {
+              background: #c62828;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+--------------------
+
+Fichier: src/scss/_buttons.scss
+Code:
+@import 'variables';
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background: #0B1741;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background: #162A64;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    background: #09122B;
+    transform: scale(0.98);
+  }
+}
+
+
+--------------------
+
+Fichier: src/scss/_product.scss
+Code:
+/* src/scss/_product.scss */
+
+.product-page {
+    max-width: 600px;
+    margin: 40px auto;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  
+    h2 {
+      margin-bottom: 20px;
+      color: #0B1741;
+      font-size: 1.8rem;
+    }
+  
+    img {
+      max-width: 300px;
+      margin-bottom: 15px;
+    }
+  
+    .price {
+      margin-bottom: 15px;
+      font-weight: bold;
+      color: #e53935;
+    }
+  
+    button {
+      background: #0B1741;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+  
+      &:hover {
+        background: #162A64;
+      }
+    }
+  
+    .back-link {
+      display: inline-block;
+      margin-top: 15px;
+      text-decoration: underline;
+      color: #333;
+      &:hover {
+        color: #0B1741;
+      }
+    }
+  }
+  
+--------------------
+
+Fichier: src/scss/_variables.scss
+Code:
+// Couleurs principales
+$primary-color: #007bff;
+$secondary-color: #f8f9fa;
+$text-color: #333;
+$background-light: #f8f9fa; // <-- Cette variable doit être définie
+// Bordures et animations
+$border-radius: 8px;
+$transition-speed: 0.3s;
+
+--------------------
+
+Fichier: src/scss/main.scss
+Code:
+@import 'variables';
+@import 'buttons';
+@import 'collapsible';
+@import 'rows';
+@import 'image-text';
+@import "checkout";
+@import "contact";
+
+--------------------
+
+Fichier: src/scss/mixins.scss
+Code:
+// src/scss/mixins.scss
+@mixin example-mixin {
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+--------------------
+
+Fichier: src/secret.js
+Code:
+// src/secret.js
+export const ADMIN_PASSWORD = "secret123";
+
+--------------------
+
+Dossier: src/services
+
+Fichier: src/services/dataService.js
+Code:
+// src/services/dataService.js
+
+import policesJSON from '../data/polices.json';
+import colorsJSON from '../data/colors.json';
+import pricingJSON from '../data/pricingRules.json';
+import shopJSON from '../data/shopProducts.json';
+
+// On duplique en variable JS qu'on peut modifier.
+let policesData = [...policesJSON];
+let colorsData = [...colorsJSON];
+let pricingData = { ...pricingJSON };
+let shopProducts = [...shopJSON];
+
+// ----- FONCTIONS DE LECTURE ----- //
+export function getPolices() {
+  return policesData;
+}
+export function getColors() {
+  return colorsData;
+}
+export function getPricingRules() {
+  return pricingData;
+}
+export function getShopProducts() {
+  return shopProducts;
+}
+
+// ----- FONCTIONS D'ÉCRITURE (SIMULATION) ----- //
+export function savePolices(updatedPolices) {
+  policesData = updatedPolices;
+}
+export function saveColors(updatedColors) {
+  colorsData = updatedColors;
+}
+export function savePricing(updatedPricing) {
+  pricingData = updatedPricing;
+}
+export function saveShopProducts(updatedShop) {
+  shopProducts = updatedShop;
+}
+
+--------------------
+
+Fichier: src/services/productService.js
+Code:
+// src/services/productService.js
+
+// Mocks : on stocke en localStorage (ou dans un fichier .json si c'était Node)
+const PRODUCT_KEY = 'neons-data';
+
+export function loadProducts() {
+  const raw = localStorage.getItem(PRODUCT_KEY);
+  if (raw) {
+    return JSON.parse(raw);
+  }
+  // Valeurs par défaut s'il n'y a rien
+  return [
+    { id: 1, name: "Néon Rouge", price: "129€", image: "https://picsum.photos/200/300?red" },
+    { id: 2, name: "Néon Bleu", price: "149€", image: "https://picsum.photos/200/300?blue" },
+  ];
+}
+
+export function saveProducts(products) {
+  localStorage.setItem(PRODUCT_KEY, JSON.stringify(products));
+}
+
+--------------------
+
+Fichier: src/setupTests.js
+Code:
+// jest-dom adds custom jest matchers for asserting on DOM nodes.
+// allows you to do things like:
+// expect(element).toHaveTextContent(/react/i)
+// learn more: https://github.com/testing-library/jest-dom
+import '@testing-library/jest-dom';
+
+--------------------

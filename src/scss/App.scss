@@ -1,0 +1,31 @@
+/* 1) Reset / base */
+/*@import 'reset'; // ou la reset inline
+/* 2) Variables / mixins */
+@import 'variables';
+@import 'buttons';
+/* 3) Composants communs */
+@import '../components/HeaderFooter/Header/header';
+@import '../components/HeaderFooter/Footer/footer';
+@import '../components/Collapsible/collapsible';
+@import '../components/ImageWithText/_image-text';
+@import '../components/Forms/Newsletter/newsletter';
+@import '../components/CarteComponent/_cart';
+
+@import '../styles/fonts.scss';
+
+
+
+/* 4) Global overrides */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+// Ajout d'une font global
+body {
+  font-family: Mali, sans-serif;
+  background-color: #000000;
+  color: #333;
+}
