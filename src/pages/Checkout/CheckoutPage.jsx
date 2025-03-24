@@ -1,17 +1,24 @@
-// src/pages/CheckoutPage.jsx
-import React from 'react';
+import React, { useState } from 'react';
+import CustomerDetailsForm from '../../components/Checkout/CustomerDetails';
+import StripeCheckoutForm from '../../components/Checkout/StripeCheckoutForm';
+import './CheckoutPage.scss';
 
 function CheckoutPage() {
-  function handlePay() {
-    alert('Paiement Stripe en cours...');
-    // TODO: appel backend -> stripe create checkout session -> redirect
-  }
+  const [customerData, setCustomerData] = useState(null);
+
+  const handleCustomerDetailsSubmit = (data) => {
+    setCustomerData(data);
+  };
 
   return (
-    <div>
-      <h2>Paiement</h2>
-      <p>Montant total: ... €</p>
-      <button onClick={handlePay}>Payer avec Stripe</button>
+    <div className="checkout-page">
+      <h2>🛒 Finalisez votre commande</h2>
+
+      {!customerData ? (
+        <CustomerDetailsForm onSubmit={handleCustomerDetailsSubmit} />
+      ) : (
+        <StripeCheckoutForm customerData={customerData} />
+      )}
     </div>
   );
 }

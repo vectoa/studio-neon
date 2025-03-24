@@ -1,50 +1,52 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { addToCart } from '../../services/cartService';
 import pricingRules from '../../data/pricingRules.json';
 import polices from '../../data/polices.json';
 import colors from '../../data/colors.json';
 import panelRules from '../../data/panelRules.json';
 import './_customize-neon.scss';
+import { useNavigate } from 'react-router-dom';
 
 function CustomizeNeonComponent() {
-  const [size, setSize] = useState('50cm'); // Par défaut, 50cm
+  const [size, setSize] = useState('50cm');
   const [text, setText] = useState('');
-  const [font, setFont] = useState(polices[0].name); // Par défaut, première police
-  const [color, setColor] = useState(colors[0].hex); // Par défaut, première couleur
-  const [panel, setPanel] = useState(Object.keys(panelRules.panels)[0]); // Par défaut, premier panneau
+  const [font, setFont] = useState(polices[0].name);
+  const [color, setColor] = useState(colors[0].hex);
+  const [panel, setPanel] = useState(Object.keys(panelRules.panels)[0]);
   const pricePerChar = 1;
+  const navigate = useNavigate();
 
-  // ✅ Vérification si la police sélectionnée est "CoffeCake"
   const isCoffeCake = font === 'CoffeCake';
+  const hasAddedPercentSymbol = useRef(false);
 
-  // ✅ Fonction qui ajoute ou enlève `‰` dynamiquement
   useEffect(() => {
     if (isCoffeCake) {
-      // Ajoute `‰` si la police est "CoffeCake" et qu'il n'est pas déjà présent
-      if (text.length > 3 && !text.includes('‰')) {
-        setText(text.slice(0, 3) + '‰' + text.slice(3));
+      if (text.length > 3 && !text.includes('‰') && !hasAddedPercentSymbol.current) {
+        setText(prev => {
+          const newText = prev.slice(0, 3) + '‰' + prev.slice(3);
+          hasAddedPercentSymbol.current = true;
+          return newText;
+        });
       }
     } else {
-      // Supprime `‰` immédiatement si on change de police
-      setText(text.replace('‰', ''));
+      if (text.includes('‰')) {
+        setText(prev => prev.replace('‰', ''));
+      }
+      hasAddedPercentSymbol.current = false;
     }
-  }, [font]);
+  }, [font, text]);
 
-  // ✅ Obtenir le prix de la taille sélectionnée
   const getSizePrice = (size) => pricingRules.sizes[size] || 0;
 
-  // ✅ Obtenir le coût supplémentaire de la police sélectionnée
   const getFontExtraCost = (fontName) => {
     const selected = polices.find(p => p.name === fontName);
     return selected ? selected.extraCost : 0;
   };
 
-  // ✅ Obtenir le coût supplémentaire du panneau sélectionné
   const getPanelExtraCost = (panelType) => {
     return panelRules.panels[panelType] ? panelRules.panels[panelType].extraCost : 0;
   };
 
-  // ✅ Calculer le prix total
   const computePrice = () => {
     const basePrice = getSizePrice(size) + text.replace('‰', '').length * pricePerChar + getFontExtraCost(font);
     return (basePrice * (1 + getPanelExtraCost(panel))).toFixed(2);
@@ -69,14 +71,13 @@ function CustomizeNeonComponent() {
     };
 
     addToCart(customNeon);
-    alert(`Néon "${text}" ajouté au panier !`);
+    navigate('/cart');;
   };
 
   return (
     <div className="customize-neon">
       <h2>✨ Personnalisez Votre Néon ✨</h2>
 
-      {/* ✅ Aperçu du néon */}
       <div className="customize-preview">
         <div
           className="preview-box"
@@ -98,14 +99,11 @@ function CustomizeNeonComponent() {
         </div>
       </div>
 
-      {/* ✅ Formulaire de personnalisation */}
       <div className="customize-form">
         <label>Taille</label>
         <select value={size} onChange={(e) => setSize(e.target.value)}>
           {Object.keys(pricingRules.sizes).map(sizeOption => (
-            <option key={sizeOption} value={sizeOption}>
-              {sizeOption}
-            </option>
+            <option key={sizeOption} value={sizeOption}>{sizeOption}</option>
           ))}
         </select>
 
@@ -114,14 +112,14 @@ function CustomizeNeonComponent() {
           type="text"
           maxLength={30}
           value={text}
-          onChange={(e) => setText(e.target.value)} // ✅ Ajout dynamique de ‰ si "CoffeCake"
+          onChange={(e) => setText(e.target.value)}
         />
 
         <label>Police</label>
         <select value={font} onChange={(e) => setFont(e.target.value)}>
           {polices.map((p) => (
             <option key={p.name} value={p.name} style={{ fontFamily: p.name }}>
-              {p.displayName ? p.displayName : p.name}
+              {p.displayName || p.name}
             </option>
           ))}
         </select>
@@ -129,9 +127,7 @@ function CustomizeNeonComponent() {
         <label>Couleur</label>
         <select value={color} onChange={(e) => setColor(e.target.value)}>
           {colors.map(c => (
-            <option key={c.hex} value={c.hex}>
-              {c.name}
-            </option>
+            <option key={c.hex} value={c.hex}>{c.name}</option>
           ))}
         </select>
 
@@ -144,9 +140,7 @@ function CustomizeNeonComponent() {
           ))}
         </select>
 
-        <div className="price">
-          Prix: {computePrice()} €
-        </div>
+        <div className="price">Prix: {computePrice()} €</div>
         <button onClick={handleAddToCart}>Ajouter au panier</button>
       </div>
     </div>

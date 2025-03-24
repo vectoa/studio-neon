@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './_cart.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { loadCart, incrementQuantity, decrementQuantity, removeItem, calculateTotal } from '../../services/cartService';
+
 
 function CartPageComponent() {
   const [items, setItems] = useState([]);
@@ -25,6 +26,12 @@ function CartPageComponent() {
   const handleRemove = (id) => {
     removeItem(id);
     refreshCart();
+  };
+
+  const navigate = useNavigate();
+
+  const handleCheckout = () => {
+    navigate('/checkout');
   };
 
   const totalPrice = calculateTotal();
@@ -78,7 +85,9 @@ function CartPageComponent() {
           <div className="cart-summary">
             <p>Total estimé : <span>{totalPrice.toFixed(2)} €</span></p>
             <p className="small-note">Taxes incluses. Rabais et frais de port calculés lors du paiement.</p>
-            <button className="checkout-btn">Valider la commande</button>
+            <button className="checkout-btn" onClick={handleCheckout}>
+              Valider la commande
+            </button>
           </div>
         </>
       )}

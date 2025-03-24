@@ -1,6 +1,3 @@
-//src/pages/Checkout/index.jsx
-import Checkout from './CheckoutPage';
+import CheckoutPage from './CheckoutPage';
 
-// traitement intermédiaire ou logique spécifique ici
-
-export default Checkout;
+export default CheckoutPage;

@@ -1,0 +1,38 @@
+.checkout-form {
+    background: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 0 15px rgba(116, 118, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 600px;
+    margin: auto;
+  
+    .card-element {
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+  
+    button {
+      background-color: #00c853;
+      color: white;
+      padding: 0.9rem;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.3s;
+  
+      &:hover {
+        background-color: #009624;
+      }
+  
+      &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+    }
+  }
+  
