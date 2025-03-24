@@ -47,6 +47,7 @@ function ProductTemplateComponent() {
             <span className="value">{product.dimensions || '60cm x 30cm'}</span>
           </div>
 
+
           <div className="product-meta">
             <span className="label">Livraison :</span>
             <span className="value">{product.delivery || '📦 3 à 5 jours ouvrés'}</span>
